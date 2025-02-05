@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {}
+    "net8.0": {
+      "Homespirations.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Homespirations.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Homespirations.Core.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Homespirations.Core/1.0.0": {
+      "type": "project",
+      "path": "../Homespirations.Core/Homespirations.Core.csproj",
+      "msbuildProject": "../Homespirations.Core/Homespirations.Core.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net8.0": []
+    "net8.0": [
+      "Homespirations.Core >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\hitab\\.nuget\\packages\\": {},
@@ -39,7 +58,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\hitab\\Workplace\\homespirations\\homespirations.server\\Homespirations.Core\\Homespirations.Core.csproj": {
+              "projectPath": "C:\\Users\\hitab\\Workplace\\homespirations\\homespirations.server\\Homespirations.Core\\Homespirations.Core.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
