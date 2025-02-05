@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "ZOPdniFCEe0=",
+  "dgSpecHash": "CrGnS+DqumI=",
   "success": true,
   "projectFilePath": "C:\\Users\\hitab\\Workplace\\homespirations\\homespirations.server\\Homespirations.Application\\Homespirations.Application.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\hitab\\.nuget\\packages\\nulid\\1.7.2\\nulid.1.7.2.nupkg.sha512",
+    "C:\\Users\\hitab\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512"
+  ],
   "logs": []
 }

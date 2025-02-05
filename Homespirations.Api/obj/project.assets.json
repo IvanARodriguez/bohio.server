@@ -266,6 +266,18 @@
           }
         }
       },
+      "NUlid/1.7.2": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.5"
+        },
+        "compile": {
+          "lib/netstandard2.0/NUlid.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/NUlid.dll": {}
+        }
+      },
       "System.Diagnostics.DiagnosticSource/9.0.1": {
         "type": "package",
         "compile": {
@@ -289,6 +301,15 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
+      "System.Memory/4.5.5": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp2.1/_._": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/_._": {}
+        }
+      },
       "Homespirations.Application/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -305,6 +326,9 @@
       "Homespirations.Core/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "NUlid": "1.7.2"
+        },
         "compile": {
           "bin/placeholder/Homespirations.Core.dll": {}
         },
@@ -740,6 +764,21 @@
         "postgresql.png"
       ]
     },
+    "NUlid/1.7.2": {
+      "sha512": "34DfywdGJ1/DUcmCHMn72zW/NtZDkfsS1/wEjgrowrMRTeL6iPyPyjVqeIUK8QnhsFd/CWp2Pw1HeYLVeagYMg==",
+      "type": "package",
+      "path": "nulid/1.7.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/netstandard2.0/NUlid.dll",
+        "lib/netstandard2.0/nulid.xml",
+        "logo.png",
+        "nulid.1.7.2.nupkg.sha512",
+        "nulid.nuspec"
+      ]
+    },
     "System.Diagnostics.DiagnosticSource/9.0.1": {
       "sha512": "yOcDWx4P/s1I83+7gQlgQLmhny2eNcU0cfo1NBWi+en4EAI38Jau+/neT85gUW6w1s7+FUJc2qNOmmwGLIREqA==",
       "type": "package",
@@ -770,6 +809,29 @@
         "system.diagnostics.diagnosticsource.9.0.1.nupkg.sha512",
         "system.diagnostics.diagnosticsource.nuspec",
         "useSharedDesignerContext.txt"
+      ]
+    },
+    "System.Memory/4.5.5": {
+      "sha512": "XIWiDvKPXaTveaB7HVganDlOCRoj03l+jrwNvcge/t8vhGYKvqV+dMv6G4SAX2NoNmN0wZfVPTAlFwZcZvVOUw==",
+      "type": "package",
+      "path": "system.memory/4.5.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/System.Memory.dll",
+        "lib/net461/System.Memory.xml",
+        "lib/netcoreapp2.1/_._",
+        "lib/netstandard1.1/System.Memory.dll",
+        "lib/netstandard1.1/System.Memory.xml",
+        "lib/netstandard2.0/System.Memory.dll",
+        "lib/netstandard2.0/System.Memory.xml",
+        "ref/netcoreapp2.1/_._",
+        "system.memory.4.5.5.nupkg.sha512",
+        "system.memory.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "Homespirations.Application/1.0.0": {
