@@ -1,5 +1,7 @@
 using System.Text.Json;
 
+namespace Homespirations.Api.Middlewares;
+
 public class ExceptionHandlingMiddleware(RequestDelegate next)
 {
     private readonly RequestDelegate _next = next;
@@ -20,14 +22,8 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
     }
 }
 
-public class ErrorResponse
+public class ErrorResponse(string code, string message)
 {
-    public string Code { get; }
-    public string Message { get; }
-
-    public ErrorResponse(string code, string message)
-    {
-        Code = code;
-        Message = message;
-    }
+    public string Code { get; } = code;
+    public string Message { get; } = message;
 }

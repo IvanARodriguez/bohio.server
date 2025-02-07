@@ -1,9 +1,12 @@
+using DotNetEnv;
 using Homespirations.Core.Interfaces;
 using Homespirations.Core.Repositories;
 using Homespirations.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Env.Load();
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>
