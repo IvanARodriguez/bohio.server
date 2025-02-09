@@ -1,6 +1,5 @@
 using Homespirations.Core.Entities;
 using Homespirations.Core.Interfaces;
-using Homespirations.Core.Repositories;
 
 namespace Homespirations.Infrastructure.Repositories;
 

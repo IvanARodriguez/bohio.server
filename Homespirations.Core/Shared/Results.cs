@@ -23,5 +23,5 @@ public class Result<T> : Result
   private Result(Error error) : base(false, error) { }
 
   public static Result<T> Success(T value) => new(value);
-  public static Result<T> Failure(Error error) => new(error);
+  public static new Result<T> Failure(Error error) => new(error);
 }
