@@ -1,4 +1,6 @@
 using DotNetEnv;
+using Homespirations.Api.Endpoints;
+using Homespirations.Api.Middlewares;
 using Homespirations.Core.Interfaces;
 using Homespirations.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +57,10 @@ try
      response.Message = "Welcome to Homespirations!";
      return Results.Json(response);
  });
+
+    app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+    app.MapHomeSpaceEndpoints();
 
     var logger = app.Services.GetRequiredService<ILogger<Program>>();
     Log.Information("App started in {environment} mode", builder.Environment.EnvironmentName);
