@@ -10,8 +10,6 @@ public class UnitOfWork(AppDbContext context) : IUnitOfWork
 
     public IRepository<HomeSpace> HomeSpaces => _homeSpaces ??= new Repository<HomeSpace>(_context);
 
-    IRepository<HomeSpace> IUnitOfWork.HomeSpaces => throw new NotImplementedException();
-
     public async Task<int> SaveChangesAsync()
     {
         return await _context.SaveChangesAsync();

@@ -3,6 +3,7 @@ using Homespirations.Application.Services;
 using Homespirations.Core.Entities;
 using Homespirations.Core.Results;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using NUlid;
 
 namespace Homespirations.Api.Endpoints;
@@ -20,49 +21,65 @@ public static class HomeSpaceEndpoints
     group.MapDelete("/{id}", Delete);
   }
 
-  private static async Task<Results<Ok<IEnumerable<HomeSpace>>, NotFound<Error>>> GetAll(HomeSpaceService service)
+  private static async Task<Results<Ok<IEnumerable<HomeSpace>>, NotFound<Error>>> GetAll(
+    [FromServices] HomeSpaceService service)
   {
     var result = await service.GetAllHomeSpacesAsync();
 
-    if (result.IsSuccess)
+    if (result.IsSuccess && result.Value is not null)
     {
-      return TypedResults.Ok(result.Value); // Use the `Value` from the Result if success
+      return TypedResults.Ok(result.Value);
     }
 
-    return TypedResults.NotFound(Errors.HomeSpace.NotFound); // Or return an error if it failed
+    return TypedResults.NotFound(Errors.HomeSpace.NotFound);
   }
 
-  private static async Task<Results<Ok<HomeSpace>, NotFound<Error>>> GetById(Ulid id, HomeSpaceService service)
+  private static async Task<Results<Ok<HomeSpace>, NotFound<Error>>> GetById(
+      Ulid id,
+      [FromServices] HomeSpaceService service)
   {
     var result = await service.GetHomeSpaceByIdAsync(id);
     if (result.IsSuccess)
     {
-      return TypedResults.Ok(result.Value); // Use the `Value` from the Result if success
+      return TypedResults.Ok(result.Value);
     }
     return TypedResults.NotFound<Error>(Errors.HomeSpace.NotFound);
   }
 
-  private static async Task<Results<CreatedAtRoute<HomeSpace>, Conflict<Error>, BadRequest<Error>>> Create(
-      HomeSpace homeSpace, HomeSpaceService service)
+  private static async Task<Results<Created, Conflict<Error>, BadRequest<Error>>> Create(
+     [FromBody] HomeSpace homeSpace,
+     [FromServices] HomeSpaceService service)
   {
+    if (homeSpace is not null && homeSpace.Id.ToString() != "")
+    {
+      var existing = await service.GetHomeSpaceByIdAsync(homeSpace.Id);
+      if (existing.IsSuccess) // Check if the home space already exists
+        return TypedResults.Conflict(Errors.HomeSpace.AlreadyExists);
+    }
     if (homeSpace == null)
+    {
       return TypedResults.BadRequest(Errors.HomeSpace.InvalidData);
+    }
 
-    var existing = await service.GetHomeSpaceByIdAsync(homeSpace.Id);
-    if (existing is not null)
-      return TypedResults.Conflict(Errors.HomeSpace.AlreadyExists);
+    var result = await service.AddHomeSpaceAsync(homeSpace);
+    if (result.IsSuccess)
+    {
+      string location = $"/api/homespace/{homeSpace.Id}";
+      return TypedResults.Created(location);
+    }
 
-    await service.AddHomeSpaceAsync(homeSpace);
-    return TypedResults.CreatedAtRoute(homeSpace, nameof(GetById), new { id = homeSpace.Id });
+    return TypedResults.BadRequest(Errors.HomeSpace.InvalidData);
   }
 
   private static async Task<Results<NoContent, NotFound<Error>, BadRequest<Error>>> Update(
-      Ulid id, HomeSpace homeSpace, HomeSpaceService service)
+      string id,
+      [FromBody] HomeSpace homeSpace,
+      [FromServices] HomeSpaceService service)
   {
-    if (id != homeSpace.Id)
+    if (id != homeSpace.Id.ToString())
       return TypedResults.BadRequest(Errors.HomeSpace.InvalidData);
 
-    var existing = await service.GetHomeSpaceByIdAsync(id);
+    var existing = await service.GetHomeSpaceByIdAsync(Ulid.Parse(id));
     if (existing is null)
       return TypedResults.NotFound(Errors.HomeSpace.NotFound);
 
@@ -70,7 +87,9 @@ public static class HomeSpaceEndpoints
     return TypedResults.NoContent();
   }
 
-  private static async Task<Results<NoContent, NotFound<Error>>> Delete(Ulid id, HomeSpaceService service)
+  private static async Task<Results<NoContent, NotFound<Error>>> Delete(
+      Ulid id,
+      [FromServices] HomeSpaceService service)
   {
     var existing = await service.GetHomeSpaceByIdAsync(id);
     if (existing is null)
@@ -79,4 +98,5 @@ public static class HomeSpaceEndpoints
     await service.DeleteHomeSpaceAsync(id);
     return TypedResults.NoContent();
   }
+
 }

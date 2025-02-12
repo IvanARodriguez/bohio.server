@@ -1,0 +1,53 @@
+### Welcome
+GET http://localhost:5000/
+Accept: application/json
+
+### Get all HomeSpaces
+GET http://localhost:5000/api/homespace/
+Accept: application/json
+
+### Get a specific HomeSpace by ID
+GET http://localhost:5000/api/homespace/01JKSTYDC6NCB90ZQR9TZQSGR7
+Accept: application/json
+
+### Create a new HomeSpace
+POST http://localhost:5000/api/homespace
+Content-Type: application/json
+
+{
+  "name": "Modern Living Room",
+  "description": "A stylish and modern living room with a minimalist design.",
+  "features": [
+    "Open space",
+    "Natural lighting",
+    "Smart home integration"
+  ],
+  "category": "Living Room",
+  "city": "Los Angeles",
+  "state": "California",
+  "country": "USA",
+  "status": "Draft"
+}
+
+### Update an existing HomeSpace
+PUT http://localhost:5000/api/homespace/01JKSTYDC6NCB90ZQR9TZQSGR7
+Content-Type: application/json
+
+{
+  "id": "01JKSTYDC6NCB90ZQR9TZQSGR7",
+  "name": "Updated Living Room",
+  "description": "A modernized living room with smart features.",
+  "features": [
+    "Open space",
+    "Smart lighting"
+  ],
+  "category": "Living Room",
+  "city": "Los Angeles",
+  "state": "California",
+  "country": "USA",
+  "status": "Published"
+}
+
+### Delete a HomeSpace
+DELETE http://localhost:5000/api/homespace/{homeSpaceId}
+Accept: application/json

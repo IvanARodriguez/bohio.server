@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Homespirations.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250210230032_SetUpMedia")]
-    partial class SetUpMedia
+    [Migration("20250211052702_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,15 +51,7 @@ namespace Homespirations.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text[]");
 
-                    b.PrimitiveCollection<List<string>>("ImageUrls")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("OwnerId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -70,12 +62,14 @@ namespace Homespirations.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.PrimitiveCollection<List<string>>("Tags")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.HasIndex("Status");
 
@@ -107,6 +101,8 @@ namespace Homespirations.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("HomeSpaceId");
+
+                    b.HasIndex("Id");
 
                     b.ToTable("Media");
                 });

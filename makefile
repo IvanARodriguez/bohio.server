@@ -32,7 +32,7 @@ migrate:
 
 # Create a new migration (use 'make migrate-new name=MigrationName')
 migrate-new:
-	$(DOTNET) ef migrations add $(name) --project ./Homespirations.Infrastructure/Homespirations.Infrastructure.csproj --startup-project ./Homespirations.Api/Homespirations.Api.csproj
+	$(DOTNET) ef migrations add $(name) --verbose --project ./Homespirations.Infrastructure/Homespirations.Infrastructure.csproj --startup-project ./Homespirations.Api/Homespirations.Api.csproj
 
 # Run unit tests
 test:

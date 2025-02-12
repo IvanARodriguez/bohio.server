@@ -1,6 +1,9 @@
+using System.Text.Json;
 using DotNetEnv;
 using Homespirations.Api.Endpoints;
 using Homespirations.Api.Middlewares;
+using Homespirations.Application.Services;
+using Homespirations.Core.Helpers;
 using Homespirations.Core.Interfaces;
 using Homespirations.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +17,12 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
+    builder.Host.UseSerilog((context, services, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .WriteTo.Console());
+
     builder.Services.AddSerilog();
+
 
     Env.Load();
 
@@ -32,6 +40,13 @@ try
 
     builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
     builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+    builder.Services.AddScoped<HomeSpaceService>();
+
+    builder.Services.AddControllers().AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.Converters.Add(new UlidJsonConverter());
+    });
 
     var app = builder.Build();
 
@@ -61,6 +76,7 @@ try
     app.UseMiddleware<ExceptionHandlingMiddleware>();
 
     app.MapHomeSpaceEndpoints();
+
 
     var logger = app.Services.GetRequiredService<ILogger<Program>>();
     Log.Information("App started in {environment} mode", builder.Environment.EnvironmentName);
