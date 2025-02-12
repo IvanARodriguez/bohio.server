@@ -1,11 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "CrGnS+DqumI=",
+  "dgSpecHash": "BGyPNbLp4eg=",
   "success": true,
   "projectFilePath": "C:\\Users\\hitab\\Workplace\\homespirations\\homespirations.server\\Homespirations.Application\\Homespirations.Application.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\hitab\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
+    "C:\\Users\\hitab\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\hitab\\.nuget\\packages\\microsoft.extensions.options\\6.0.0\\microsoft.extensions.options.6.0.0.nupkg.sha512",
+    "C:\\Users\\hitab\\.nuget\\packages\\microsoft.extensions.primitives\\6.0.0\\microsoft.extensions.primitives.6.0.0.nupkg.sha512",
     "C:\\Users\\hitab\\.nuget\\packages\\nulid\\1.7.2\\nulid.1.7.2.nupkg.sha512",
-    "C:\\Users\\hitab\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512"
+    "C:\\Users\\hitab\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512",
+    "C:\\Users\\hitab\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
   ],
   "logs": []
 }

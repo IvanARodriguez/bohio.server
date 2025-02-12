@@ -1,0 +1,5 @@
+{
+	"cSpell.words": ["homespace"],
+	"editor.formatOnSave": true,
+	"dotnet-test-explorer.testProjectPath": "Homespirations.Api.IntegrationTests"
+}

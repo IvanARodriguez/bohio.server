@@ -5,8 +5,6 @@ project.lock.json
 *.pyc
 nupkg/
 
-# Visual Studio Code
-.vscode/
 
 # Rider
 .idea/
@@ -42,3 +40,4 @@ msbuild.log
 msbuild.err
 msbuild.wrn
 .env
+.fake

@@ -23,6 +23,8 @@ try
 
     builder.Services.AddSerilog();
 
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
     Env.Load();
 
@@ -36,7 +38,11 @@ try
     }
 
     builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    {
+        options.EnableSensitiveDataLogging();
+        options.UseNpgsql(connectionString);
+    });
+
 
     builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
     builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

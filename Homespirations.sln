@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homespirations.Infrastructu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homespirations.Api", "Homespirations.Api\Homespirations.Api.csproj", "{23B27FE3-26C2-4233-8858-5F305AA04501}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homespirations.Api.IntegrationTests", "Homespirations.Api.IntegrationTests\Homespirations.Api.IntegrationTests.csproj", "{E041A119-6684-481A-A278-322E60A2E42D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,13 @@ Global
 		{23B27FE3-26C2-4233-8858-5F305AA04501}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23B27FE3-26C2-4233-8858-5F305AA04501}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23B27FE3-26C2-4233-8858-5F305AA04501}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B79D4802-89BE-4C9E-9F4F-5867347FA431}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B79D4802-89BE-4C9E-9F4F-5867347FA431}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B79D4802-89BE-4C9E-9F4F-5867347FA431}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B79D4802-89BE-4C9E-9F4F-5867347FA431}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E041A119-6684-481A-A278-322E60A2E42D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E041A119-6684-481A-A278-322E60A2E42D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E041A119-6684-481A-A278-322E60A2E42D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E041A119-6684-481A-A278-322E60A2E42D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

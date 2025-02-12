@@ -1,5 +1,8 @@
 using Homespirations.Core.Entities;
 using Homespirations.Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+
 
 namespace Homespirations.Infrastructure.Repositories;
 

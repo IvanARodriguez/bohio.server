@@ -3,12 +3,14 @@ using Homespirations.Core.Entities;
 using Homespirations.Core.Results;
 using NUlid;
 using Application.Common.Errors;
+using AutoMapper;
 
 namespace Homespirations.Application.Services;
 
-public class HomeSpaceService(IUnitOfWork unitOfWork)
+public class HomeSpaceService(IUnitOfWork unitOfWork, IMapper mapper)
 {
   private readonly IUnitOfWork _unitOfWork = unitOfWork;
+  private readonly IMapper _mapper = mapper;
 
   public async Task<Result<IEnumerable<HomeSpace>>> GetAllHomeSpacesAsync()
   {
@@ -33,14 +35,19 @@ public class HomeSpaceService(IUnitOfWork unitOfWork)
 
   public async Task<Result> UpdateHomeSpaceAsync(HomeSpace homeSpace)
   {
+    if (homeSpace == null || string.IsNullOrWhiteSpace(homeSpace.Id.ToString()))
+      return Result.Failure(Errors.HomeSpace.InvalidData);
+
     var existingHomeSpace = await _unitOfWork.HomeSpaces.GetByIdAsync(homeSpace.Id);
     if (existingHomeSpace is null)
       return Result.Failure(Errors.HomeSpace.NotFound);
 
-    await _unitOfWork.HomeSpaces.UpdateAsync(homeSpace);
+    _mapper.Map(homeSpace, existingHomeSpace);
+
     await _unitOfWork.SaveChangesAsync();
     return Result.Success();
   }
+
 
   public async Task<Result> DeleteHomeSpaceAsync(Ulid id)
   {

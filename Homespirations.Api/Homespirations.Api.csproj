@@ -2,7 +2,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Homespirations.Application\Homespirations.Application.csproj" />
-    <ProjectReference Include="..\Homespirations.Infrastructure\Homespirations.Infrastructure.csproj" />
+    <ProjectReference
+      Include="..\Homespirations.Infrastructure\Homespirations.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,6 +18,10 @@
     <PackageReference Include="Serilog" Version="4.2.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Homespirations.Api.IntegrationTests" />
   </ItemGroup>
 
   <PropertyGroup>

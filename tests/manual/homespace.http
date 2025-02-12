@@ -7,7 +7,7 @@ GET http://localhost:5000/api/homespace/
 Accept: application/json
 
 ### Get a specific HomeSpace by ID
-GET http://localhost:5000/api/homespace/01JKSTYDC6NCB90ZQR9TZQSGR7
+GET http://localhost:5000/api/homespace/01JKW8YE04EQA0TPV3D8EHHNC7
 Accept: application/json
 
 ### Create a new HomeSpace
@@ -30,12 +30,12 @@ Content-Type: application/json
 }
 
 ### Update an existing HomeSpace
-PUT http://localhost:5000/api/homespace/01JKSTYDC6NCB90ZQR9TZQSGR7
+PUT http://localhost:5000/api/homespace/01JKW8YE04EQA0TPV3D8EHHNC7
 Content-Type: application/json
 
 {
-  "id": "01JKSTYDC6NCB90ZQR9TZQSGR7",
-  "name": "Updated Living Room",
+  "id": "01JKW8YE04EQA0TPV3D8EHHNC7",
+  "name": "Updated Great Room",
   "description": "A modernized living room with smart features.",
   "features": [
     "Open space",
@@ -49,5 +49,5 @@ Content-Type: application/json
 }
 
 ### Delete a HomeSpace
-DELETE http://localhost:5000/api/homespace/{homeSpaceId}
+DELETE http://localhost:5000/api/homespace/01JKW8YE04EQA0TPV3D8EHHNC7
 Accept: application/json

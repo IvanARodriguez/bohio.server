@@ -14,12 +14,6 @@ public class Repository<T>(AppDbContext context) : IRepository<T> where T : clas
 
     public async Task AddAsync(T entity) => await _context.Set<T>().AddAsync(entity);
 
-    public async Task UpdateAsync(T entity)
-    {
-        _context.Set<T>().Update(entity);
-        await _context.SaveChangesAsync();
-    }
-
     public async Task DeleteAsync(Ulid id)
     {
         var entity = await GetByIdAsync(id);

@@ -72,20 +72,17 @@ public static class HomeSpaceEndpoints
   }
 
   private static async Task<Results<NoContent, NotFound<Error>, BadRequest<Error>>> Update(
-      string id,
-      [FromBody] HomeSpace homeSpace,
-      [FromServices] HomeSpaceService service)
+     string id,
+     [FromBody] HomeSpace homeSpace,
+     [FromServices] HomeSpaceService service)
   {
-    if (id != homeSpace.Id.ToString())
+    var result = await service.UpdateHomeSpaceAsync(homeSpace);
+    if (!result.IsSuccess)
       return TypedResults.BadRequest(Errors.HomeSpace.InvalidData);
 
-    var existing = await service.GetHomeSpaceByIdAsync(Ulid.Parse(id));
-    if (existing is null)
-      return TypedResults.NotFound(Errors.HomeSpace.NotFound);
-
-    await service.UpdateHomeSpaceAsync(homeSpace);
     return TypedResults.NoContent();
   }
+
 
   private static async Task<Results<NoContent, NotFound<Error>>> Delete(
       Ulid id,
