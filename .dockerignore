@@ -1,46 +1,46 @@
 # flyctl launch added from .gitignore
-**\*.swp
-**\*.*~
-**\project.lock.json
-**\.DS_Store
-**\*.pyc
-**\nupkg
+**/*.swp
+**/*.*~
+**/project.lock.json
+**/.DS_Store
+**/*.pyc
+**/nupkg
 
 # Visual Studio Code
-**\.vscode
+**/.vscode
 
 # Rider
-**\.idea
+**/.idea
 
 # Visual Studio
-**\.vs
+**/.vs
 
 # Fleet
-**\.fleet
+**/.fleet
 
 # Code Rush
-**\.cr
+**/.cr
 
 # User-specific files
-**\*.suo
-**\*.user
-**\*.userosscache
-**\*.sln.docstates
+**/*.suo
+**/*.user
+**/*.userosscache
+**/*.sln.docstates
 
 # Build results
-**\[Dd]ebug
-**\[Dd]ebugPublic
-**\[Rr]elease
-**\[Rr]eleases
-**\x64
-**\x86
-**\build
-**\bld
-**\[Bb]in
-**\[Oo]bj
-**\[Oo]ut
-**\msbuild.log
-**\msbuild.err
-**\msbuild.wrn
-**\.env
+**/[Dd]ebug
+**/[Dd]ebugPublic
+**/[Rr]elease
+**/[Rr]eleases
+**/x64
+**/x86
+**/build
+**/bld
+**/[Bb]in
+**/[Oo]bj
+**/[Oo]ut
+**/msbuild.log
+**/msbuild.err
+**/msbuild.wrn
+**/.env
 fly.toml
