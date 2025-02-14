@@ -3,6 +3,7 @@ using DotNetEnv;
 using Homespirations.Api.Endpoints;
 using Homespirations.Api.Middlewares;
 using Homespirations.Application.Services;
+using Homespirations.Core.Entities;
 using Homespirations.Core.Helpers;
 using Homespirations.Core.Interfaces;
 using Homespirations.Infrastructure.Repositories;
@@ -13,92 +14,88 @@ using Serilog;
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
-try
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, services, configuration) => configuration
+.ReadFrom.Configuration(context.Configuration)
+.WriteTo.Console());
+
+builder.Services.AddSerilog();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+Env.Load();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                       ?? Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
+
+if (string.IsNullOrEmpty(connectionString))
 {
-    var builder = WebApplication.CreateBuilder(args);
+    Log.Fatal("Database connection string is missing.");
+    throw new Exception("Database connection string is missing.");
+}
 
-    builder.Host.UseSerilog((context, services, configuration) => configuration
-    .ReadFrom.Configuration(context.Configuration)
-    .WriteTo.Console());
-
-    builder.Services.AddSerilog();
-
-    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-
-    Env.Load();
-
-    string? connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.EnableSensitiveDataLogging();
+    options.UseNpgsql(connectionString);
+});
 
 
-    if (string.IsNullOrEmpty(connectionString))
-    {
-        Log.Fatal("Database connection string is missing.");
-        throw new Exception("Database connection string is missing.");
-    }
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<HomeSpaceService>();
 
-    builder.Services.AddDbContext<AppDbContext>(options =>
-    {
-        options.EnableSensitiveDataLogging();
-        options.UseNpgsql(connectionString);
-    });
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    options.JsonSerializerOptions.Converters.Add(new UlidJsonConverter());
+});
 
+var app = builder.Build();
 
-    builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-    builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-    builder.Services.AddScoped<HomeSpaceService>();
+app.UseSerilogRequestLogging();
 
-    builder.Services.AddControllers().AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        options.JsonSerializerOptions.Converters.Add(new UlidJsonConverter());
-    });
+var isTesting = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_TESTS") == "true";
 
-    var app = builder.Build();
-
-    app.UseSerilogRequestLogging();
-
+if (!isTesting)
+{
     try
     {
         using var scope = app.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        dbContext.Database.OpenConnection();
-        dbContext.Database.CloseConnection();
-        Log.Information("Database connected successfully.");
+        var databaseProvider = dbContext.Database.ProviderName;
+
+        if (databaseProvider != "Microsoft.EntityFrameworkCore.InMemory")
+        {
+            dbContext.Database.OpenConnection();
+            dbContext.Database.CloseConnection();
+            Log.Information("Database connected successfully.");
+        }
     }
     catch (Exception ex)
     {
         Log.Fatal(ex, "Failed to connect to the database.");
     }
-
-    app.MapGet("/", () =>
- {
-     Log.Information("Hello, world!");
-     SuccessResponse response = new();
-     response.Message = "Welcome to Homespirations!";
-     return Results.Json(response);
- });
-
-    app.UseMiddleware<ExceptionHandlingMiddleware>();
-
-    app.MapHomeSpaceEndpoints();
-
-
-    var logger = app.Services.GetRequiredService<ILogger<Program>>();
-    Log.Information("App started in {environment} mode", builder.Environment.EnvironmentName);
-
-
-    app.Run();
-
 }
-catch (Exception ex)
+
+app.MapGet("/", () =>
 {
-    Log.Fatal(ex, "Application terminated unexpectedly");
-}
-finally
-{
-    Log.CloseAndFlush();
-}
+    WelcomeMessage response = new()
+    {
+        Message = "Welcome to Homespirations!"
+    };
+    return Results.Json(response);
+});
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+app.MapHomeSpaceEndpoints();
+
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+
+Log.Information("App started in {environment} mode", builder.Environment.EnvironmentName);
 
 
-public class SuccessResponse { public string Message { get; set; } = "Success"; }
+app.Run();

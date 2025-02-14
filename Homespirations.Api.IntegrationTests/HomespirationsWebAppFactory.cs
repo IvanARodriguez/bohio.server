@@ -7,50 +7,50 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Testcontainers.PostgreSql;
 
 namespace Homespirations.Api.IntegrationTests;
 
 internal class HomespirationsWebAppFactory : WebApplicationFactory<Program>
 {
+  private readonly PostgreSqlContainer _dbContainer;
+
+  public HomespirationsWebAppFactory()
+  {
+    _dbContainer = new PostgreSqlBuilder()
+        .WithDatabase("testdb")
+        .WithUsername("testuser")
+        .WithPassword("testpassword")
+        .Build();
+    _dbContainer.StartAsync().Wait();
+  }
+
   protected override void ConfigureWebHost(IWebHostBuilder builder)
   {
     builder.ConfigureTestServices(services =>
     {
+      services.RemoveAll(typeof(Serilog.ILogger));
       services.RemoveAll(typeof(DbContextOptions<AppDbContext>));
-      var connString = GetConnectionString();
       services.AddDbContext<AppDbContext>(options =>
       {
         options.EnableSensitiveDataLogging();
-        options.UseNpgsql(connString);
+        options.UseNpgsql(_dbContainer.GetConnectionString());
       });
 
-      var dbContext = CreateDbContext(services);
-      try
-      {
-        dbContext.Database.EnsureDeleted();
-      }
-      catch (Exception ex)
-      {
-        Console.WriteLine($"Error during database initialization: {ex.Message}");
-      }
+      using var scope = services.BuildServiceProvider().CreateScope();
+      var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+      dbContext.Database.EnsureCreated();
     });
   }
 
+  /// <summary>
+  /// Asynchronously disposes the PostgreSQL container and any resources used by the factory.
+  /// </summary>
+  /// <returns>A task that represents the asynchronous dispose operation.</returns>
 
-  private static string? GetConnectionString()
+  public override async ValueTask DisposeAsync()
   {
-    var configuration = new ConfigurationBuilder()
-      .AddUserSecrets<HomespirationsWebAppFactory>()
-      .Build();
-    var connectionString = configuration.GetConnectionString("DefaultConnection");
-    return connectionString;
-  }
-
-  private static DbContext CreateDbContext(IServiceCollection services)
-  {
-    var servicesProvider = services.BuildServiceProvider();
-    var scope = servicesProvider.CreateScope();
-    var dbContext = scope.ServiceProvider.GetRequiredService<DbContext>();
-    return dbContext;
+    await _dbContainer.DisposeAsync();
+    await base.DisposeAsync();
   }
 }

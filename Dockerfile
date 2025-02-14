@@ -1,7 +1,7 @@
 # Use the official .NET SDK image for building
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
-# Install make
+# Install make (if needed for any build tools or dependencies)
 RUN apt-get update && apt-get install -y make && rm -rf /var/lib/apt/lists/*
 
 # Set working directory inside the container
@@ -18,10 +18,10 @@ RUN dotnet restore "Homespirations.Api/Homespirations.Api.csproj"
 # Copy the entire application source code
 COPY . .
 
-# Build the application
-RUN dotnet publish "Homespirations.Api/Homespirations.Api.csproj" -c Release -o /app/publish
+# Build and publish the application
+RUN dotnet publish "Homespirations.Api/Homespirations.Api.csproj" -c Release -o /app/publish -r linux-x64 --self-contained false
 
-# Use the official ASP.NET Core runtime image
+# Use the official ASP.NET Core runtime image for the final stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 
 # Set working directory
@@ -31,9 +31,10 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Expose the port Fly.io will route traffic to
-ENV ASPNETCORE_URLS=http://+:5000
+EXPOSE 5000
 
-# Default environment variables
+# Set environment variables
+ENV ASPNETCORE_URLS=http://+:5000
 ENV ASPNETCORE_ENVIRONMENT=Production
 
 # Command to run the application

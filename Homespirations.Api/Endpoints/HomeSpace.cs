@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Application.Common.Errors;
 using Homespirations.Application.Services;
 using Homespirations.Core.Entities;
@@ -43,24 +44,37 @@ public static class HomeSpaceEndpoints
     {
       return TypedResults.Ok(result.Value);
     }
-    return TypedResults.NotFound<Error>(Errors.HomeSpace.NotFound);
+    return TypedResults.NotFound(Errors.HomeSpace.NotFound);
   }
 
   private static async Task<Results<Created, Conflict<Error>, BadRequest<Error>>> Create(
-     [FromBody] HomeSpace homeSpace,
-     [FromServices] HomeSpaceService service)
+    [FromBody] HomeSpace homeSpace,
+    [FromServices] HomeSpaceService service)
   {
-    if (homeSpace is not null && homeSpace.Id.ToString() != "")
-    {
-      var existing = await service.GetHomeSpaceByIdAsync(homeSpace.Id);
-      if (existing.IsSuccess) // Check if the home space already exists
-        return TypedResults.Conflict(Errors.HomeSpace.AlreadyExists);
-    }
-    if (homeSpace == null)
+    // Validate input
+    if (homeSpace is null)
     {
       return TypedResults.BadRequest(Errors.HomeSpace.InvalidData);
     }
 
+    // Check if HomeSpace already exists
+    if (homeSpace.Id != Ulid.Empty)
+    {
+      var existing = await service.GetHomeSpaceByIdAsync(homeSpace.Id);
+      if (existing.IsSuccess)
+      {
+        return TypedResults.BadRequest(Errors.HomeSpace.InvalidData);
+      }
+    }
+
+    var validationCtx = new ValidationContext(homeSpace);
+    var validationResults = new List<ValidationResult>();
+    if (!Validator.TryValidateObject(homeSpace, validationCtx, validationResults, true))
+    {
+      return TypedResults.BadRequest(Errors.HomeSpace.InvalidData); // Ensure error type matches return type
+    }
+
+    // Create new HomeSpace
     var result = await service.AddHomeSpaceAsync(homeSpace);
     if (result.IsSuccess)
     {
@@ -70,6 +84,7 @@ public static class HomeSpaceEndpoints
 
     return TypedResults.BadRequest(Errors.HomeSpace.InvalidData);
   }
+
 
   private static async Task<Results<NoContent, NotFound<Error>, BadRequest<Error>>> Update(
      string id,
