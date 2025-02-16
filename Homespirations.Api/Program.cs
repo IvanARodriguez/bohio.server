@@ -1,8 +1,10 @@
 using System.Text.Json;
 using DotNetEnv;
+using FluentValidation;
 using Homespirations.Api.Endpoints;
 using Homespirations.Api.Middlewares;
 using Homespirations.Application.Services;
+using Homespirations.Application.Validators;
 using Homespirations.Core.Entities;
 using Homespirations.Core.Helpers;
 using Homespirations.Core.Interfaces;
@@ -42,9 +44,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString);
 });
 
-
+// Dependency injections
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddSingleton<IValidator<HomeSpace>, HomeSpaceValidator>();
+builder.Services.AddSingleton<IValidator<Media>, MediaValidator>();
+builder.Services.AddSingleton<IValidator<FormFile>, FormFileValidator>();
 builder.Services.AddScoped<HomeSpaceService>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>

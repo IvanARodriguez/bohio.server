@@ -36,7 +36,7 @@ migrate-new:
 
 # Run unit tests
 test:
-	$(DOTNET) test --configuration $(CONFIG)
+	$(DOTNET) test Homespirations.Api.IntegrationTests/Homespirations.Api.IntegrationTests.csproj
 
 # Publish the project
 publish:

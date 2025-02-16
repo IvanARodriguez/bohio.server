@@ -11,4 +11,11 @@ public static class Errors
         public static readonly Error InvalidData = new("HomeSpace.InvalidData", "The provided home space data is invalid.");
     }
 
+    public static class Media
+    {
+        public static readonly Error InvalidId = new("Media.InvalidHomeSpaceId", "The provided home space ID is invalid.");
+
+        public static readonly Error InvalidData = new("Media.InvalidData", "The provided home space data is invalid.");
+    }
+
 }

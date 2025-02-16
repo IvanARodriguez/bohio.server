@@ -7,7 +7,7 @@ GET http://localhost:5000/api/homespace/
 Accept: application/json
 
 ### Get a specific HomeSpace by ID
-GET http://localhost:5000/api/homespace/01JKW8YE04EQA0TPV3D8EHHNC7
+GET http://localhost:5000/api/homespace/01JKW8YE04EQA0TPV3D8EHHNC9
 Accept: application/json
 
 ### Create a new HomeSpace
@@ -15,7 +15,7 @@ POST http://localhost:5000/api/homespace
 Content-Type: application/json
 
 {
-  "name": "Modern Living Room",
+  "name": "",
   "description": "A stylish and modern living room with a minimalist design.",
   "features": [
     "Open space",
@@ -34,7 +34,6 @@ PUT http://localhost:5000/api/homespace/01JKW8YE04EQA0TPV3D8EHHNC7
 Content-Type: application/json
 
 {
-  "id": "01JKW8YE04EQA0TPV3D8EHHNC7",
   "name": "Updated Great Room",
   "description": "A modernized living room with smart features.",
   "features": [

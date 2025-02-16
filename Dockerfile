@@ -1,9 +1,6 @@
 # Use the official .NET SDK image for building
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
-# Install make (if needed for any build tools or dependencies)
-RUN apt-get update && apt-get install -y make && rm -rf /var/lib/apt/lists/*
-
 # Set working directory inside the container
 WORKDIR /app
 
