@@ -2,6 +2,7 @@ using Application.Common.Errors;
 using Homespirations.Application.Services;
 using Homespirations.Core.Entities;
 using Homespirations.Core.Results;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NUlid;
@@ -19,7 +20,7 @@ public static class HomeSpaceEndpoints
     group.MapPost("/", Create);
     group.MapPut("/{id}", Update);
     group.MapDelete("/{id}", Delete);
-    group.MapPost("/{id}/upload", AddMedia);
+    group.MapPost("/{id}/upload", AddMedia).DisableAntiforgery();
   }
 
   private static async Task<Results<Ok<IEnumerable<HomeSpace>>, NotFound<Error>>> GetAll(
@@ -118,46 +119,31 @@ public static class HomeSpaceEndpoints
     return TypedResults.NoContent();
   }
 
-  private static async Task<Results<NoContent, NotFound<Error>, BadRequest<List<Error>>>> AddMedia(
+  [IgnoreAntiforgeryToken]
+  private static async Task<Results<Ok<List<MediaDto>>, NotFound<Error>, BadRequest<List<Error>>>> AddMedia(
       string id,
       [FromServices] HomeSpaceService service,
-      [FromBody] IFormFileCollection files
-  )
+      [FromServices] MediaServices mediaServices,
+      [FromForm] IFormFileCollection files)
   {
-    if (id is null || !Ulid.TryParse(id, out var ulid))
+    // Check for invalid or missing ID
+    if (id is null || string.IsNullOrWhiteSpace(id) || !Ulid.TryParse(id, out var ulid))
     {
       return TypedResults.BadRequest(new List<Error> { Errors.Media.InvalidId });
     }
 
-    var homeSpace = await service.GetHomeSpaceByIdAsync(ulid);
-    if (homeSpace is null)
-      return TypedResults.NotFound(Errors.HomeSpace.NotFound);
+    // Upload media files
+    var result = await mediaServices.UploadMediaAsync(ulid, files);
 
-    if (files is null || files.Count == 0)
+    // Check for any upload issues and return success or failure
+    if (!result.IsSuccess)
     {
-      return TypedResults.BadRequest(new List<Error> { Errors.Media.InvalidData });
+      return TypedResults.BadRequest(result.Errors);
     }
 
-    foreach (var file in files)
-    {
-      // is Image or Video
-      if (file.ContentType != "image/jpeg" || file.ContentType != "image/png" || file.ContentType != "video/webm" || file.ContentType != "video/ogg" && file.ContentType != "video/mp4")
-      {
-        return TypedResults.BadRequest(new List<Error> { Errors.Media.InvalidData });
-      }
-
-      var media = new Media()
-      {
-        HomeSpaceId = ulid,
-        MediaType = MediaType.Image,
-        CreatedAt = DateTime.UtcNow,
-        UpdatedAt = DateTime.UtcNow,
-      };
-
-      await service.AddMediaAsync(media);
-    }
-
-    return TypedResults.NoContent();
+    // Return the successfully uploaded media
+    return TypedResults.Ok<List<MediaDto>>(result.Value);
   }
+
 
 }

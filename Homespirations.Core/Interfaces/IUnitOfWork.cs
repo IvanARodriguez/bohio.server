@@ -5,6 +5,7 @@ namespace Homespirations.Core.Interfaces
     public interface IUnitOfWork : IDisposable
     {
         IRepository<HomeSpace> HomeSpaces { get; }
+        IRepository<Media> Media { get; }
         Task<int> SaveChangesAsync();
     }
 }

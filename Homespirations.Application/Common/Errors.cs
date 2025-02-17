@@ -16,6 +16,7 @@ public static class Errors
         public static readonly Error InvalidId = new("Media.InvalidHomeSpaceId", "The provided home space ID is invalid.");
 
         public static readonly Error InvalidData = new("Media.InvalidData", "The provided home space data is invalid.");
+        public static readonly Error UploadFailed = new("Media.UploadFailed", "An error occurred while uploading the media.");
     }
 
 }

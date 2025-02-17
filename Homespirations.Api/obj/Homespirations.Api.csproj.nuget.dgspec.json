@@ -244,6 +244,10 @@
               "target": "Package",
               "version": "[13.0.1, )"
             },
+            "Microsoft.AspNetCore.Http": {
+              "target": "Package",
+              "version": "[2.3.0, )"
+            },
             "NUlid": {
               "target": "Package",
               "version": "[1.7.2, )"
@@ -319,6 +323,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "AWSSDK.S3": {
+              "target": "Package",
+              "version": "[3.7.415, )"
+            },
             "DotNetEnv": {
               "target": "Package",
               "version": "[3.1.1, )"

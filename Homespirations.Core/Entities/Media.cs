@@ -15,8 +15,10 @@ public class Media
   public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
   public DateTime? UpdatedAt { get; set; }
   // Foreign Key
+  [JsonConverter(typeof(UlidJsonConverter))]
   public Ulid HomeSpaceId { get; set; }
   // Navigation Property
+  [JsonIgnore]
   public HomeSpace? HomeSpace { get; set; } = null;
 }
 
