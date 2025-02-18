@@ -43,7 +43,6 @@ namespace Homespirations.Application.Services
                 using var stream = file.OpenReadStream();
                 byte[] optimizedImage = await _imageOptimizer.OptimizeAsync(stream, 1280);
 
-
                 string fileName = $"homespace_media_{Ulid.NewUlid()}.webp";
                 string cloudflareUrl = await _cloudStorage.UploadAsync(optimizedImage, fileName, "image/webp");
 
@@ -55,11 +54,14 @@ namespace Homespirations.Application.Services
                 };
 
                 await _unitOfWork.Media.AddAsync(media);
-                MediaDto mediaDto = _mapper.Map<MediaDto>(media);
-                uploadedMedia.Add(mediaDto);
+                uploadedMedia.Add(_mapper.Map<MediaDto>(media));
             }
+
+            // 🔥 Commit the changes to the database
+            await _unitOfWork.SaveChangesAsync();
 
             return Result<List<MediaDto>>.Success(uploadedMedia);
         }
+
     }
 }

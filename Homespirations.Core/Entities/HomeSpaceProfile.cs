@@ -9,5 +9,6 @@ public class HomeSpaceProfile : Profile
     public HomeSpaceProfile()
     {
         CreateMap<HomeSpace, HomeSpace>();
+        CreateMap<HomeSpace, HomeSpacesFeedDto>();
     }
 }

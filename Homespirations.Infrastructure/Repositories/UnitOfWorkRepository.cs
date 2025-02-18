@@ -1,3 +1,4 @@
+using AutoMapper;
 using Homespirations.Core.Entities;
 using Homespirations.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +13,12 @@ public class UnitOfWork(AppDbContext context) : IUnitOfWork
     private IRepository<HomeSpace>? _homeSpaces;
 
     private IRepository<Media>? _media;
+    private IHomeSpaceRepository _homeSpaceAndMedia = null!;
 
     public IRepository<HomeSpace> HomeSpaces => _homeSpaces ??= new Repository<HomeSpace>(_context);
     public IRepository<Media> Media => _media ??= new Repository<Media>(_context);
+
+    public IHomeSpaceRepository HomeSpaceAndMedia => _homeSpaceAndMedia ??= new HomeSpaceRepository(_context);
 
     public async Task<int> SaveChangesAsync()
     {

@@ -23,7 +23,7 @@ public static class HomeSpaceEndpoints
     group.MapPost("/{id}/upload", AddMedia).DisableAntiforgery();
   }
 
-  private static async Task<Results<Ok<IEnumerable<HomeSpace>>, NotFound<Error>>> GetAll(
+  private static async Task<Results<Ok<IEnumerable<HomeSpacesFeedDto>>, NotFound<Error>>> GetAll(
     [FromServices] HomeSpaceService service)
   {
     var result = await service.GetAllHomeSpacesAsync();
