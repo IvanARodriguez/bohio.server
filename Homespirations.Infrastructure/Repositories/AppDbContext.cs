@@ -8,6 +8,7 @@ namespace Homespirations.Infrastructure.Repositories
   public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)  // Add the `: DbContext` properly
   {
     public DbSet<HomeSpace> HomeSpaces { get; set; }
+    public DbSet<Media> Media { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -43,6 +44,8 @@ namespace Homespirations.Infrastructure.Repositories
        .HasForeignKey(m => m.HomeSpaceId)
        .OnDelete(DeleteBehavior.Cascade);
       });
+
+
 
 
     }

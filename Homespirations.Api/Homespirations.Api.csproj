@@ -2,8 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Homespirations.Application\Homespirations.Application.csproj" />
-    <ProjectReference
-      Include="..\Homespirations.Infrastructure\Homespirations.Infrastructure.csproj" />
+    <ProjectReference Include="..\Homespirations.Infrastructure\Homespirations.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,9 +14,11 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.5.0" />
     <PackageReference Include="Serilog" Version="4.2.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.5.0" />
   </ItemGroup>
 
   <ItemGroup>
