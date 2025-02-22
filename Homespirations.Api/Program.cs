@@ -22,6 +22,12 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
 .ReadFrom.Configuration(context.Configuration)
 .WriteTo.Console());
 
+// Ensure configuration is available
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables(); // Load from environment as fallback
+
 builder.Services.AddSerilog();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -53,6 +59,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 var app = builder.Build();
 app.UseAntiforgery();
 app.UseSerilogRequestLogging();
+app.UseAuthentication();
+app.UseAuthorization();
 
 var isTesting = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_TESTS") == "true";
 

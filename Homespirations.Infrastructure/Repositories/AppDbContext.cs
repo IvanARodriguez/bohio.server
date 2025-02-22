@@ -1,12 +1,14 @@
 using Homespirations.Core.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NUlid;
 
 namespace Homespirations.Infrastructure.Repositories
 {
 
-  public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)  // Add the `: DbContext` properly
+  public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<AppUser>(options)
   {
+    public DbSet<AppUser> Users { get; set; }
     public DbSet<HomeSpace> HomeSpaces { get; set; }
     public DbSet<Media> Media { get; set; }
 
@@ -45,11 +47,17 @@ namespace Homespirations.Infrastructure.Repositories
        .OnDelete(DeleteBehavior.Cascade);
       });
 
+      modelBuilder.Entity<AppUser>(e =>
+      {
+        e.Property(e => e.UserId)
+          .IsRequired();
 
-
+        e.HasOne(u => u.User)
+        .WithOne()
+        .HasForeignKey<AppUser>(u => u.UserId);
+      });
 
     }
-
   }
 }
 

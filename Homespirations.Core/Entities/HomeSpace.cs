@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Homespirations.Core.Helpers;
@@ -7,6 +8,7 @@ namespace Homespirations.Core.Entities;
 
 public class HomeSpace
 {
+  [Key]
   [NotMapped]
   [JsonConverter(typeof(UlidJsonConverter))]
   public Ulid Id { get; set; } = Ulid.NewUlid();
