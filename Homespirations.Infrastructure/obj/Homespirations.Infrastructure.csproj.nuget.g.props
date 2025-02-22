@@ -22,7 +22,8 @@
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">C:\Users\hitab\.nuget\packages\microsoft.codeanalysis.analyzers\3.3.4</PkgMicrosoft_CodeAnalysis_Analyzers>
-    <PkgAWSSDK_Core Condition=" '$(PkgAWSSDK_Core)' == '' ">C:\Users\hitab\.nuget\packages\awssdk.core\3.7.402.1</PkgAWSSDK_Core>
+    <PkgAWSSDK_Core Condition=" '$(PkgAWSSDK_Core)' == '' ">C:\Users\hitab\.nuget\packages\awssdk.core\3.7.402.3</PkgAWSSDK_Core>
+    <PkgAWSSDK_SimpleEmailV2 Condition=" '$(PkgAWSSDK_SimpleEmailV2)' == '' ">C:\Users\hitab\.nuget\packages\awssdk.simpleemailv2\3.7.408</PkgAWSSDK_SimpleEmailV2>
     <PkgAWSSDK_S3 Condition=" '$(PkgAWSSDK_S3)' == '' ">C:\Users\hitab\.nuget\packages\awssdk.s3\3.7.415</PkgAWSSDK_S3>
   </PropertyGroup>
 </Project>

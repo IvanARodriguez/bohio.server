@@ -137,6 +137,10 @@
               "target": "Package",
               "version": "[3.7.415, )"
             },
+            "AWSSDK.SimpleEmailV2": {
+              "target": "Package",
+              "version": "[3.7.408, )"
+            },
             "DotNetEnv": {
               "target": "Package",
               "version": "[3.1.1, )"

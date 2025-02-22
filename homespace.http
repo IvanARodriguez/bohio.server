@@ -50,3 +50,13 @@ Content-Type: application/json
 ### Delete a HomeSpace
 DELETE http://localhost:5000/api/homespace/01JKW8YE04EQA0TPV3D8EHHNC7
 Accept: application/json
+
+### User
+
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "ivancalvo91@gmail.com",
+  "password": "@SecuredPassword134"
+}

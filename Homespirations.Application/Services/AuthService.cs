@@ -12,13 +12,14 @@ public class AuthService(IUserService userService, ILogger<AuthService> logger)
 
     public async Task<Result> RegisterUserAsync(RegisterRequest request)
     {
-        var (success, errors, user) = await _userService.CreateUserAsync(request);
+        var (success, errors, user, token) = await _userService.CreateUserAsync(request);
         if (!success)
         {
             return Result.Failure(errors!);
         }
-        _logger.LogInformation("${USER}", user);
 
+        _logger.LogInformation("User registered: {UserId}. Activation email sent.", user!.Id);
         return Result.Success();
     }
 }
+

@@ -15,6 +15,7 @@ public static class DependencyInjection
     {
         services.AddScoped<HomeSpaceService>();
         services.AddScoped<MediaServices>();
+        services.AddScoped<AuthService>();
         services.AddSingleton<IValidator<HomeSpace>, HomeSpaceValidator>();
         services.AddSingleton<IValidator<Media>, MediaValidator>();
         services.AddSingleton<IValidator<FormFile>, FormFileValidator>();
