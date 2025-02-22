@@ -9,6 +9,9 @@ public class User
     [JsonConverter(typeof(UlidJsonConverter))]
     public string Id { get; set; } = Ulid.NewUlid().ToString(); // Stored as string
 
-    public string Email { get; set; } = "";
-    public string Hash { get; set; } = "";
+    public string Email { get; set; } = string.Empty;
+    public string Hash { get; set; } = string.Empty;
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public bool EmailConfirmed { get; set; }
 }

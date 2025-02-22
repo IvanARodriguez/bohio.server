@@ -1,3 +1,5 @@
+using Homespirations.Core.DTOs;
+
 namespace Homespirations.Core.Results;
 
 public class Result

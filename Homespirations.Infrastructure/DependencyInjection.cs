@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using DotNetEnv;
+using Homespirations.Infrastructure.Identity;
+using Homespirations.Infrastructure.Mappings;
 
 namespace Homespirations.Infrastructure
 {
@@ -55,6 +57,8 @@ namespace Homespirations.Infrastructure
             services.AddScoped<IImageOptimizer, ImageOptimizer>();
             services.AddScoped<ICloudStorage, CloudStorage>();
             services.AddSingleton<IAmazonS3, AmazonS3Client>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddAutoMapper(typeof(Profiles));
 
             return services;
 

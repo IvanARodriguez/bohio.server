@@ -3,17 +3,23 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 using NUlid;
 
+namespace Homespirations.Infrastructure.Identity;
+
 public class AppUser : IdentityUser
 {
-    [JsonIgnore]
-    public string UserId { get; set; } = ""; // Foreign key stored as string
-
-    [NotMapped] // Used in the application but not stored in DB
-    public Ulid UlidUserId
+    public AppUser()
     {
-        get => Ulid.Parse(UserId);
-        set => UserId = value.ToString();
+        Id = Ulid.NewUlid().ToString();
     }
 
-    public required User User { get; set; }
+    [JsonIgnore]
+    [NotMapped]
+    public Ulid UlidId
+    {
+        get => Ulid.Parse(Id);
+        set => Id = value.ToString();
+    }
+
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
 }

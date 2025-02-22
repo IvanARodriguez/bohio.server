@@ -1,5 +1,6 @@
 
 using FluentValidation;
+using Homespirations.Application.Mappings;
 using Homespirations.Application.Services;
 using Homespirations.Application.Validators;
 using Homespirations.Core.Entities;
@@ -17,6 +18,8 @@ public static class DependencyInjection
         services.AddSingleton<IValidator<HomeSpace>, HomeSpaceValidator>();
         services.AddSingleton<IValidator<Media>, MediaValidator>();
         services.AddSingleton<IValidator<FormFile>, FormFileValidator>();
+        services.AddAutoMapper(typeof(Profiles));
+
 
         return services;
     }

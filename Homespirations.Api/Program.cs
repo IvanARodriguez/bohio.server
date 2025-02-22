@@ -97,6 +97,7 @@ app.MapGet("/", () =>
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapHomeSpaceEndpoints();
+app.MapAuthEndpoints();
 
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
