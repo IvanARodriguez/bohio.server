@@ -23,7 +23,7 @@ public static class HomeSpaceEndpoints
     group.MapPost("/{id}/upload", AddMedia).DisableAntiforgery();
   }
 
-  private static async Task<Results<Ok<IEnumerable<HomeSpacesFeedDto>>, NotFound<Error>>> GetAll(
+  private static async Task<Results<Ok<IEnumerable<HomeSpacesFeed>>, NotFound<Error>>> GetAll(
     [FromServices] HomeSpaceService service)
   {
     var result = await service.GetAllHomeSpacesAsync();
@@ -120,7 +120,7 @@ public static class HomeSpaceEndpoints
   }
 
   [IgnoreAntiforgeryToken]
-  private static async Task<Results<Ok<List<MediaDto>>, NotFound<Error>, BadRequest<List<Error>>>> AddMedia(
+  private static async Task<Results<Ok<List<MediaRequest>>, NotFound<Error>, BadRequest<List<Error>>>> AddMedia(
       string id,
       [FromServices] HomeSpaceService service,
       [FromServices] MediaServices mediaServices,
@@ -142,7 +142,7 @@ public static class HomeSpaceEndpoints
     }
 
     // Return the successfully uploaded media
-    return TypedResults.Ok<List<MediaDto>>(result.Value);
+    return TypedResults.Ok<List<MediaRequest>>(result.Value);
   }
 
 

@@ -4,7 +4,7 @@ using NUlid;
 
 namespace Homespirations.Core.Entities
 {
-    public class MediaDto
+    public class MediaRequest
     {
         [JsonConverter(typeof(UlidJsonConverter))]
         public Ulid Id { get; set; } = Ulid.NewUlid();

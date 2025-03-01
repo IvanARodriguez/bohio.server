@@ -35,15 +35,16 @@ public class SesEmailService : IEmailService
         var config = new AmazonSimpleEmailServiceV2Config { RegionEndpoint = RegionEndpoint.GetBySystemName(awsRegion) };
 
         _sesClient = new AmazonSimpleEmailServiceV2Client(credentials, config);
-        _senderEmail = Environment.GetEnvironmentVariable("AWS_SES_SENDER") ?? "no-reply@homespirations.com";
+        _senderEmail = Environment.GetEnvironmentVariable("AWS_SES_SENDER") ?? "";
     }
 
     public async Task SendEmailAsync(string to, string subject, string body)
     {
+        _logger.LogDebug("Email request to ${TO}, from ${FROM}", to, _senderEmail);
         var request = new SendEmailRequest
         {
             FromEmailAddress = _senderEmail,
-            Destination = new Destination { ToAddresses = new List<string> { to } },
+            Destination = new Destination { ToAddresses = [to] },
             Content = new EmailContent
             {
                 Simple = new Message

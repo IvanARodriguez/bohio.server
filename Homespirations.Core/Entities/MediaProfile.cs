@@ -6,8 +6,8 @@ namespace Homespirations.Core.Entities
     {
         public MediaProfile()
         {
-            CreateMap<Media, MediaDto>().ReverseMap();
-            CreateMap<MediaDto, Media>().ReverseMap();
+            CreateMap<Media, MediaRequest>().ReverseMap();
+            CreateMap<MediaRequest, Media>().ReverseMap();
         }
 
     }

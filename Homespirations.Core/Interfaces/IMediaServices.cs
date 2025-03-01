@@ -11,6 +11,6 @@ namespace Homespirations.Core.Interfaces
 {
     public interface IMediaServices
     {
-        Task<Result<List<MediaDto>>> UploadMediaAsync(Ulid homeSpaceId, IFormFileCollection files);
+        Task<Result<List<MediaRequest>>> UploadMediaAsync(Ulid homeSpaceId, IFormFileCollection files);
     }
 }

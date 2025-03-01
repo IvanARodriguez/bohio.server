@@ -23,15 +23,15 @@ namespace Homespirations.Application.Services
 
         private readonly IMapper _mapper = mapper;
 
-        public async Task<Result<List<MediaDto>>> UploadMediaAsync(Ulid homeSpaceId, IFormFileCollection files)
+        public async Task<Result<List<MediaRequest>>> UploadMediaAsync(Ulid homeSpaceId, IFormFileCollection files)
         {
             var homeSpace = await _unitOfWork.HomeSpaces.GetByIdAsync(homeSpaceId);
             if (homeSpace == null)
             {
-                return Result<List<MediaDto>>.Failure(new Error("NotFound", "HomeSpace not found."));
+                return Result<List<MediaRequest>>.Failure(new Error("NotFound", "HomeSpace not found."));
             }
 
-            var uploadedMedia = new List<MediaDto>();
+            var uploadedMedia = new List<MediaRequest>();
 
             foreach (var file in files)
             {
@@ -54,13 +54,13 @@ namespace Homespirations.Application.Services
                 };
 
                 await _unitOfWork.Media.AddAsync(media);
-                uploadedMedia.Add(_mapper.Map<MediaDto>(media));
+                uploadedMedia.Add(_mapper.Map<MediaRequest>(media));
             }
 
             // 🔥 Commit the changes to the database
             await _unitOfWork.SaveChangesAsync();
 
-            return Result<List<MediaDto>>.Success(uploadedMedia);
+            return Result<List<MediaRequest>>.Success(uploadedMedia);
         }
 
     }

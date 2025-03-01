@@ -17,11 +17,11 @@ public class HomeSpaceService(IUnitOfWork unitOfWork, IMapper mapper, IValidator
   private readonly IValidator<HomeSpace> _validator = validator;
   private readonly ILogger<HomeSpaceService> _logger = logger;
 
-  public async Task<Result<IEnumerable<HomeSpacesFeedDto>>> GetAllHomeSpacesAsync()
+  public async Task<Result<IEnumerable<HomeSpacesFeed>>> GetAllHomeSpacesAsync()
   {
     var homeSpaces = await _unitOfWork.HomeSpaceAndMedia.GetHomeSpaceAndImagesAsync();
-    var mappedHomeSpaces = _mapper.Map<IEnumerable<HomeSpacesFeedDto>>(homeSpaces);
-    return Result<IEnumerable<HomeSpacesFeedDto>>.Success(mappedHomeSpaces ?? []);
+    var mappedHomeSpaces = _mapper.Map<IEnumerable<HomeSpacesFeed>>(homeSpaces);
+    return Result<IEnumerable<HomeSpacesFeed>>.Success(mappedHomeSpaces ?? []);
   }
 
   public async Task<Result<HomeSpace>> GetHomeSpaceByIdAsync(Ulid id)
