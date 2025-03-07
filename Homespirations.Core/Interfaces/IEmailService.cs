@@ -1,6 +1,8 @@
+using Homespirations.Core.Entities;
+
 namespace Homespirations.Core.Interfaces;
 
 public interface IEmailService
 {
-    Task SendEmailAsync(string to, string subject, string body);
+    Task SendEmailAsync(EmailOptions emailOptions);
 }

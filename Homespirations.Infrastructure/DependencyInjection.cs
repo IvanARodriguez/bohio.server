@@ -1,5 +1,5 @@
 using Amazon.S3;
-using Amazon.SimpleEmailV2;
+using Amazon.SimpleEmail;
 using Amazon;
 using Homespirations.Core.Interfaces;
 using Homespirations.Infrastructure.Repositories;
@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using DotNetEnv;
 using Homespirations.Infrastructure.Identity;
 using Homespirations.Infrastructure.Mappings;
+using Amazon.Runtime;
 
 namespace Homespirations.Infrastructure;
 
@@ -61,12 +62,28 @@ public static class DependencyInjection
         services.AddScoped<IUserService, UserService>();
         services.AddAutoMapper(typeof(Profiles));
 
-        // ✅ Use Scoped Instead of Singleton for SES Client
-        services.AddScoped<IAmazonSimpleEmailServiceV2, AmazonSimpleEmailServiceV2Client>();
+        services.AddSingleton<IAmazonSimpleEmailService>(sp =>
+        {
+            var configuration = sp.GetRequiredService<IConfiguration>();
+            var awsAccessKey = Environment.GetEnvironmentVariable("AWS_SES_ACCESS_KEY");
+            var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SES_SECRET_KEY");
+            var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION") ?? "us-east-2";
 
-        // ✅ Inject the SES client into the SesEmailService
+            if (string.IsNullOrEmpty(awsAccessKey) || string.IsNullOrEmpty(awsSecretKey))
+            {
+                throw new InvalidOperationException("AWS SES credentials are missing.");
+            }
+
+            var credentials = new BasicAWSCredentials(awsAccessKey, awsSecretKey);
+            var config = new AmazonSimpleEmailServiceConfig
+            {
+                RegionEndpoint = RegionEndpoint.GetBySystemName(awsRegion),
+            };
+
+            return new AmazonSimpleEmailServiceClient(credentials, config);
+        });
+
         services.AddScoped<IEmailService, SesEmailService>();
-
         return services;
     }
 }

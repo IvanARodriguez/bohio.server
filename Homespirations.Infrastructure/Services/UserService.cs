@@ -41,8 +41,8 @@ public class UserService(UserManager<AppUser> userManager, IMapper mapper, ILogg
         // Send Activation Email
         var subject = "Confirm Your Email";
         var body = $"Click <a href='{confirmUrl}'>here</a> to confirm your email.";
-
-        await _emailService.SendEmailAsync(user.Email, subject, body);
+        _logger.LogInformation("Sending email: ${Url}, ${body}", frontendUrl, body);
+        await _emailService.SendEmailAsync(user.Email, subject, body, body);
 
         _logger.LogInformation("Activation email sent to {Email}", user.Email);
 

@@ -62,7 +62,7 @@ namespace Homespirations.Infrastructure.Storage
                 return null;
             }
 
-            _logger.LogDebug($"Public file URL: https://pub-352d598dded441409abdb6bbdf9852d8.r2.dev/{fileName}");
+            _logger.LogDebug("Public file URL: https://pub-352d598dded441409abdb6bbdf9852d8.r2.dev/{FILENAME}", fileName);
 
             return $"https://pub-352d598dded441409abdb6bbdf9852d8.r2.dev/{fileName}";
         }

@@ -335,13 +335,17 @@
               "target": "Package",
               "version": "[3.7.415, )"
             },
-            "AWSSDK.SimpleEmailV2": {
+            "AWSSDK.SimpleEmail": {
               "target": "Package",
-              "version": "[3.7.408, )"
+              "version": "[3.7.100, )"
             },
             "DotNetEnv": {
               "target": "Package",
               "version": "[3.1.1, )"
+            },
+            "MailKit": {
+              "target": "Package",
+              "version": "[2.5.1, )"
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
