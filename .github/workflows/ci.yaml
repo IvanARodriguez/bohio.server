@@ -31,11 +31,11 @@ jobs:
 
       # Step 5: Run integration tests
       - name: Run integration tests
-        run: dotnet test Homespirations.Api.IntegrationTests/Homespirations.Api.IntegrationTests.csproj --configuration Release
+        run: dotnet test Bohio.Api.IntegrationTests/Bohio.Api.IntegrationTests.csproj --configuration Release
 
       # Step 6: Publish the app
       - name: Publish the app
-        run: dotnet publish Homespirations.Api/Homespirations.Api.csproj --configuration Release --output ./publish --runtime linux-x64 --self-contained false
+        run: dotnet publish Bohio.Api/Bohio.Api.csproj --configuration Release --output ./publish --runtime linux-x64 --self-contained false
 
   deploy:
     runs-on: ubuntu-latest

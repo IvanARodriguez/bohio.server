@@ -5,18 +5,18 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 # Copy solution and restore dependencies
-COPY ["Homespirations.Api/Homespirations.Api.csproj", "Homespirations.Api/"]
-COPY ["Homespirations.Application/Homespirations.Application.csproj", "Homespirations.Application/"]
-COPY ["Homespirations.Core/Homespirations.Core.csproj", "Homespirations.Core/"]
-COPY ["Homespirations.Infrastructure/Homespirations.Infrastructure.csproj", "Homespirations.Infrastructure/"]
+COPY ["Bohio.Api/Bohio.Api.csproj", "Bohio.Api/"]
+COPY ["Bohio.Application/Bohio.Application.csproj", "Bohio.Application/"]
+COPY ["Bohio.Core/Bohio.Core.csproj", "Bohio.Core/"]
+COPY ["Bohio.Infrastructure/Bohio.Infrastructure.csproj", "Bohio.Infrastructure/"]
 
-RUN dotnet restore "Homespirations.Api/Homespirations.Api.csproj"
+RUN dotnet restore "Bohio.Api/Bohio.Api.csproj"
 
 # Copy the entire application source code
 COPY . .
 
 # Build and publish the application
-RUN dotnet publish "Homespirations.Api/Homespirations.Api.csproj" -c Release -o /app/publish -r linux-x64 --self-contained false
+RUN dotnet publish "Bohio.Api/Bohio.Api.csproj" -c Release -o /app/publish -r linux-x64 --self-contained false
 
 # Use the official ASP.NET Core runtime image for the final stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
@@ -35,4 +35,4 @@ ENV ASPNETCORE_URLS=http://+:5000
 ENV ASPNETCORE_ENVIRONMENT=Production
 
 # Command to run the application
-ENTRYPOINT ["dotnet", "Homespirations.Api.dll"]
+ENTRYPOINT ["dotnet", "Bohio.Api.dll"]

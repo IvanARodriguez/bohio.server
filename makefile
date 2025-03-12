@@ -1,7 +1,7 @@
 .PHONY: watch
 
 watch:
-	dotnet watch --project ./Homespirations.Api/Homespirations.Api.csproj run
+	dotnet watch --project ./Bohio.Api/Bohio.Api.csproj run
 
 PROJECT_NAME = homespiration
 DOTNET = dotnet
@@ -24,20 +24,20 @@ build:
 
 # Run the application
 run:
-	$(DOTNET) run --project ./Homespirations.Api/Homespirations.Api.csproj --configuration $(CONFIG)
+	$(DOTNET) run --project ./Bohio.Api/Bohio.Api.csproj --configuration $(CONFIG)
 
 # Apply database migrations (using Infrastructure for migrations)
 migrate:
-	$(DOTNET) ef database update --verbose --project ./Homespirations.Infrastructure/Homespirations.Infrastructure.csproj --startup-project ./Homespirations.Api/Homespirations.Api.csproj
+	$(DOTNET) ef database update --verbose --project ./Bohio.Infrastructure/Bohio.Infrastructure.csproj --startup-project ./Bohio.Api/Bohio.Api.csproj
 
 # Create a new migration (use 'make migrate-new name=MigrationName')
 migrate-new:
-	$(DOTNET) ef migrations add $(name) --verbose --project ./Homespirations.Infrastructure/Homespirations.Infrastructure.csproj --startup-project ./Homespirations.Api/Homespirations.Api.csproj
+	$(DOTNET) ef migrations add $(name) --verbose --project ./Bohio.Infrastructure/Bohio.Infrastructure.csproj --startup-project ./Bohio.Api/Bohio.Api.csproj
 
 # Run unit tests
 test:
-	$(DOTNET) test Homespirations.Api.IntegrationTests/Homespirations.Api.IntegrationTests.csproj
+	$(DOTNET) test Bohio.Api.IntegrationTests/Bohio.Api.IntegrationTests.csproj
 
 # Publish the project
 publish:
-	$(DOTNET) publish ./Homespirations.Api/Homespirations.Api.csproj -c $(CONFIG) -o $(BUILD_DIR)
+	$(DOTNET) publish ./Bohio.Api/Bohio.Api.csproj -c $(CONFIG) -o $(BUILD_DIR)

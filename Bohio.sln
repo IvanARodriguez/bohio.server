@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bohio.Core", "Bohio.Core\Bohio.Core.csproj", "{324867A6-33B6-475C-A6EE-C201832236EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bohio.Application", "Bohio.Application\Bohio.Application.csproj", "{893D72B9-A292-46D5-9F45-6DE357C93689}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bohio.Infrastructure", "Bohio.Infrastructure\Bohio.Infrastructure.csproj", "{C56AE961-4098-43A9-BF6B-07D7E20B0B67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bohio.Api", "Bohio.Api\Bohio.Api.csproj", "{23B27FE3-26C2-4233-8858-5F305AA04501}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bohio.Api.IntegrationTests", "Bohio.Api.IntegrationTests\Bohio.Api.IntegrationTests.csproj", "{E041A119-6684-481A-A278-322E60A2E42D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{324867A6-33B6-475C-A6EE-C201832236EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{324867A6-33B6-475C-A6EE-C201832236EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{324867A6-33B6-475C-A6EE-C201832236EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{324867A6-33B6-475C-A6EE-C201832236EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{893D72B9-A292-46D5-9F45-6DE357C93689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{893D72B9-A292-46D5-9F45-6DE357C93689}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{893D72B9-A292-46D5-9F45-6DE357C93689}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{893D72B9-A292-46D5-9F45-6DE357C93689}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C56AE961-4098-43A9-BF6B-07D7E20B0B67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C56AE961-4098-43A9-BF6B-07D7E20B0B67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C56AE961-4098-43A9-BF6B-07D7E20B0B67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C56AE961-4098-43A9-BF6B-07D7E20B0B67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23B27FE3-26C2-4233-8858-5F305AA04501}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23B27FE3-26C2-4233-8858-5F305AA04501}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23B27FE3-26C2-4233-8858-5F305AA04501}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23B27FE3-26C2-4233-8858-5F305AA04501}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B79D4802-89BE-4C9E-9F4F-5867347FA431}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B79D4802-89BE-4C9E-9F4F-5867347FA431}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B79D4802-89BE-4C9E-9F4F-5867347FA431}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B79D4802-89BE-4C9E-9F4F-5867347FA431}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E041A119-6684-481A-A278-322E60A2E42D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E041A119-6684-481A-A278-322E60A2E42D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E041A119-6684-481A-A278-322E60A2E42D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E041A119-6684-481A-A278-322E60A2E42D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
