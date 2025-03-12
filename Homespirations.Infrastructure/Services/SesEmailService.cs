@@ -1,7 +1,9 @@
+using System.Reflection;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using Homespirations.Core.Entities;
 using Homespirations.Core.Interfaces;
+using Homespirations.Core.Types;
 using Microsoft.Extensions.Logging;
 
 namespace Homespirations.Infrastructure.Services;
@@ -10,6 +12,22 @@ public class SesEmailService(ILogger<SesEmailService> logger, IAmazonSimpleEmail
 {
     private readonly ILogger<SesEmailService> _logger = logger;
     private readonly IAmazonSimpleEmailService _emailService = emailService;
+
+    public string ReadEmailTemplate(TemplateEmailType emailType)
+    {
+        string templateName = emailType switch
+        {
+            TemplateEmailType.SpanishRegistrationEnglish => "es-registration.html",
+            TemplateEmailType.EnglishRegistrationEmail => "en-registration.html",
+            _ => throw new ArgumentException("Template not supported"),
+        };
+        var assembly = Assembly.GetExecutingAssembly();
+        var resourceName = $"Bohio.Infrastructure.EmailTemplates.{templateName}";
+
+        using var stream = assembly.GetManifestResourceStream(resourceName) ?? throw new FileNotFoundException($"Template '{templateName}' not found.");
+        using var reader = new StreamReader(stream);
+        return reader.ReadToEnd();
+    }
 
     public async Task SendEmailAsync(EmailOptions emailOption)
     {

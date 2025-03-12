@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Homespirations.Core.DTOs;
 using Homespirations.Core.Interfaces;
 using Homespirations.Application.Services;
+using Homespirations.Core.Types;
 
 
 public static class AuthEndpoints
@@ -12,9 +13,15 @@ public static class AuthEndpoints
     {
         var group = app.MapGroup("/api/auth");
 
-        group.MapPost("/register", async ([FromBody] RegisterRequest request, AuthService authService) =>
+        group.MapPost("/register", async (HttpContext ctx, [FromBody] RegisterRequest request, AuthService authService) =>
        {
-           var result = await authService.RegisterUserAsync(request);
+           var path = ctx.Request.Path.Value;
+           Language lang = Language.EN;
+           if (path != null && path.StartsWith("/es", StringComparison.OrdinalIgnoreCase))
+           {
+               lang = Language.ES;
+           }
+           var result = await authService.RegisterUserAsync(request, lang);
            return result.IsSuccess ? Results.Ok("Successfully registered") : Results.BadRequest(result.Errors);
        });
 

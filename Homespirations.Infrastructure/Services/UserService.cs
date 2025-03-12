@@ -5,6 +5,10 @@ using Homespirations.Core.DTOs;
 using Homespirations.Core.Results;
 using Homespirations.Core.Interfaces;
 using Homespirations.Infrastructure.Identity;
+using Homespirations.Core.Entities;
+using Homespirations.Core.Types;
+
+namespace Homespirations.Infrastructure.Services;
 
 public class UserService(UserManager<AppUser> userManager, IMapper mapper, ILogger<UserService> logger, IEmailService emailService) : IUserService
 {
@@ -13,7 +17,7 @@ public class UserService(UserManager<AppUser> userManager, IMapper mapper, ILogg
     private readonly ILogger<UserService> _logger = logger;
     private readonly IEmailService _emailService = emailService;
 
-    public async Task<(bool Success, List<Error>? Errors, User? User, string? Token)> CreateUserAsync(RegisterRequest request)
+    public async Task<(bool Success, List<Error>? Errors, User? User, string? Token)> CreateUserAsync(RegisterRequest request, Language language)
     {
         var user = new AppUser
         {
@@ -40,9 +44,31 @@ public class UserService(UserManager<AppUser> userManager, IMapper mapper, ILogg
 
         // Send Activation Email
         var subject = "Confirm Your Email";
-        var body = $"Click <a href='{confirmUrl}'>here</a> to confirm your email.";
-        _logger.LogInformation("Sending email: ${Url}, ${body}", frontendUrl, body);
-        await _emailService.SendEmailAsync(user.Email, subject, body, body);
+        var textBody = $"Click <a href='{confirmUrl}'>here</a> to confirm your email.";
+
+        string templateName = "en-registration.html";
+        if (language == Language.ES)
+        {
+            templateName = "en-registration.html";
+        }
+        string templatePath = Path.Combine(Directory.GetCurrentDirectory(),
+            "Bohio.Infrastructure", "EmailTemplates", templateName);
+
+        string emailTemplate = await File.ReadAllTextAsync(templatePath);
+        string emailBody = emailTemplate.Replace("{confirmUrl}", confirmUrl);
+
+        _logger.LogInformation("Sending email: ${Url}, ${body}", frontendUrl, textBody);
+
+        EmailOptions options = new()
+        {
+            Subject = subject,
+            TextBody = textBody,
+            HtmlBody = emailBody,
+            From = "Bohio - Verify Account <noreply@bohio.net>",
+            To = user.Email
+        };
+
+        await _emailService.SendEmailAsync(options);
 
         _logger.LogInformation("Activation email sent to {Email}", user.Email);
 

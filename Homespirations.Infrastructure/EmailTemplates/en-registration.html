@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Verify Your Bohio Account</title>
+		<style>
+			/* General Reset */
+			body,
+			table,
+			td,
+			a {
+				font-family: Arial, sans-serif;
+				text-align: left;
+			}
+			body {
+				margin: 0;
+				padding: 0;
+				background-color: #f4f4f4;
+			}
+			table {
+				width: 100%;
+				border-spacing: 0;
+			}
+			.email-container {
+				max-width: 600px;
+				margin: 0 auto;
+				background: #ffffff;
+				border-radius: 8px;
+				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+			}
+			.logo {
+				padding: 20px;
+				text-align: center;
+			}
+			.logo img {
+				max-width: 80px;
+			}
+			.content {
+				padding: 20px;
+				text-align: left;
+			}
+			.button {
+				display: inline-block;
+				background-color: #7c0303;
+				color: #ffffff;
+				text-decoration: none;
+				padding: 12px 20px;
+				border-radius: 5px;
+				font-weight: bold;
+				margin-top: 20px;
+			}
+			.button:hover {
+				background-color: #550808;
+			}
+			.footer {
+				padding: 20px 20px 0;
+				font-size: 12px;
+				color: #777;
+				text-align: left;
+			}
+			.alt-link {
+				padding: 20px;
+				font-size: 14px;
+				color: #666;
+				text-align: left;
+			}
+			/* Dark Mode */
+			@media (prefers-color-scheme: dark) {
+				body {
+					background-color: #1a1a1a;
+				}
+				.email-container {
+					background: #2a2a2a;
+					color: #ffffff;
+				}
+				.footer,
+				.alt-link {
+					color: #bbbbbb;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<table role="presentation">
+			<tr>
+				<td align="center">
+					<table class="email-container">
+						<tr>
+							<td class="logo">
+								<img src="https://cdn.bohio.net/logo.png" alt="Bohio Logo" />
+								<h1>Bohio</h1>
+							</td>
+						</tr>
+						<tr>
+							<td class="content">
+								<h2>Verify Your Account</h2>
+								<p>
+									Thank you for signing up with Bohio! Please confirm your email
+									address to complete your registration.
+								</p>
+								<a href="{confirmUrl}" class="button">Verify My Account</a>
+								<p>
+									If you did not sign up for Bohio, you can ignore this email.
+								</p>
+							</td>
+						</tr>
+						<tr>
+							<td class="footer">&copy; 2025 Bohio. All rights reserved.</td>
+						</tr>
+						<tr>
+							<td class="alt-link">
+								If you can't click the button, copy and paste this link into
+								your browser:
+								<br />
+								<a
+									href="{confirmUrl}"
+									style="color: #007bff; word-break: break-all"
+									>{confirmUrl}</a
+								>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

@@ -1,6 +1,7 @@
 using Homespirations.Core.DTOs;
 using Homespirations.Core.Interfaces;
 using Homespirations.Core.Results;
+using Homespirations.Core.Types;
 using Microsoft.Extensions.Logging;
 
 
@@ -10,9 +11,9 @@ public class AuthService(IUserService userService, ILogger<AuthService> logger)
     private readonly IUserService _userService = userService;
     private readonly ILogger<AuthService> _logger = logger;
 
-    public async Task<Result> RegisterUserAsync(RegisterRequest request)
+    public async Task<Result> RegisterUserAsync(RegisterRequest request, Language lang)
     {
-        var (success, errors, user, token) = await _userService.CreateUserAsync(request);
+        var (success, errors, user, token) = await _userService.CreateUserAsync(request, lang);
         if (!success)
         {
             return Result.Failure(errors!);
