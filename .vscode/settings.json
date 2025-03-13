@@ -1,5 +1,5 @@
 {
-	"cSpell.words": ["DOTNET", "homespace"],
+	"cSpell.words": ["Bohio", "DOTNET", "homespace"],
 	"editor.formatOnSave": true,
 	"dotnet-test-explorer.testProjectPath": "**/*Tests.csproj"
 }
