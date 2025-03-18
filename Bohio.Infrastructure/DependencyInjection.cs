@@ -97,7 +97,7 @@ public static class DependencyInjection
         {
             var logger = serviceProvider.GetRequiredService<ILogger>();
 
-            var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") ?? Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING"); ;
+            var connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING"); ;
 
             if (string.IsNullOrEmpty(connectionString))
             {
