@@ -59,8 +59,28 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 var app = builder.Build();
 app.UseAntiforgery();
 app.UseSerilogRequestLogging();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapGet("/", () =>
+{
+    WelcomeMessage response = new()
+    {
+        Message = "Welcome to Bohio!"
+    };
+    return Results.Json(response);
+});
+
+app.MapGet("/protected", (HttpContext context) =>
+{
+    var user = context.User.Identity;
+    if (user == null || !user.IsAuthenticated)
+    {
+        return Results.Unauthorized();
+    }
+    return Results.Ok($"Welcome {user.Name}!");
+}).RequireAuthorization();
 
 var isTesting = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_TESTS") == "true";
 
@@ -84,15 +104,6 @@ if (!isTesting)
         Log.Fatal(ex, "Failed to connect to the database.");
     }
 }
-
-app.MapGet("/", () =>
-{
-    WelcomeMessage response = new()
-    {
-        Message = "Welcome to Bohio!"
-    };
-    return Results.Json(response);
-});
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 

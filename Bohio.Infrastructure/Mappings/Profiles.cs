@@ -1,4 +1,5 @@
 using AutoMapper;
+using Bohio.Core.DTOs;
 using Bohio.Infrastructure.Identity;
 
 namespace Bohio.Infrastructure.Mappings
@@ -8,6 +9,7 @@ namespace Bohio.Infrastructure.Mappings
         public Profiles()
         {
             CreateMap<AppUser, User>();
+            CreateMap<AppUser, GetUserResponse>();
         }
     }
 }

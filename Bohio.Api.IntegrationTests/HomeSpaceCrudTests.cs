@@ -15,6 +15,8 @@ public class HomeSpaceCrudTests : IClassFixture<BohioWebAppFactory>
     public HomeSpaceCrudTests()
     {
         MyEnvironment.SetVariable("DOTNET_RUNNING_IN_TESTS", "true");
+        MyEnvironment.SetVariable("JWT_SECRET", "justAdding@someRandome2025Key");
+        MyEnvironment.SetVariable("DATABASE_CONNECTION_STRING", "this_connection_string:not_being_used");
         var app = new BohioWebAppFactory();
         _client = app.CreateDefaultClient();
     }
@@ -66,7 +68,6 @@ public class HomeSpaceCrudTests : IClassFixture<BohioWebAppFactory>
             Status = HomeSpaceStatus.Draft,
         };
 
-        // First, create the HomeSpace
         var createResponse = await _client.PostAsJsonAsync("/api/homespace", homeSpace);
         createResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
 
