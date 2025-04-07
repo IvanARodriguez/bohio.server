@@ -1,10 +1,12 @@
 
+using Amazon.SimpleEmail;
+using Bohio.Core.Interfaces;
 using Bohio.Infrastructure.Repositories;
+using Bohio.Infrastructure.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Testcontainers.PostgreSql;
@@ -36,6 +38,10 @@ internal class BohioWebAppFactory : WebApplicationFactory<Program>
         options.EnableSensitiveDataLogging();
         options.UseNpgsql(_dbContainer.GetConnectionString());
       });
+
+      services.RemoveAll(typeof(IEmailService));
+      services.AddScoped<IEmailService, MockEmailService>();
+      services.RemoveAll(typeof(IAmazonSimpleEmailService));
 
       using var scope = services.BuildServiceProvider().CreateScope();
       var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();

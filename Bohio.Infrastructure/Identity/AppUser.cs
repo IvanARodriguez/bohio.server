@@ -7,21 +7,21 @@ namespace Bohio.Infrastructure.Identity;
 
 public class AppUser : IdentityUser
 {
-    public AppUser()
-    {
-        Id = Ulid.NewUlid().ToString();
-    }
+  public AppUser()
+  {
+    Id = Ulid.NewUlid().ToString();
+  }
 
-    [JsonIgnore]
-    [NotMapped]
-    public Ulid UlidId
-    {
-        get => Ulid.Parse(Id);
-        set => Id = value.ToString();
-    }
+  [JsonIgnore]
+  [NotMapped]
+  public Ulid UlidId
+  {
+    get => Ulid.Parse(Id);
+    set => Id = value.ToString();
+  }
 
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
-    public DateTime RefreshTokenExpiryTime { get; set; }
-    public string RefreshToken { get; set; } = string.Empty;
+  public string FirstName { get; set; } = string.Empty;
+  public string LastName { get; set; } = string.Empty;
+  public DateTime RefreshTokenExpiryTime { get; set; }
+  public string RefreshToken { get; set; } = string.Empty;
 }

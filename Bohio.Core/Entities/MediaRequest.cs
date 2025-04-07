@@ -4,10 +4,10 @@ using NUlid;
 
 namespace Bohio.Core.Entities
 {
-    public class MediaRequest
-    {
-        [JsonConverter(typeof(UlidJsonConverter))]
-        public Ulid Id { get; set; } = Ulid.NewUlid();
-        public string Url { get; set; } = string.Empty;
-    }
+  public class MediaRequest
+  {
+    [JsonConverter(typeof(UlidJsonConverter))]
+    public Ulid Id { get; set; } = Ulid.NewUlid();
+    public string Url { get; set; } = string.Empty;
+  }
 }

@@ -6,7 +6,6 @@ using Application.Common.Errors;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Http;
 
 namespace Bohio.Application.Services;
 

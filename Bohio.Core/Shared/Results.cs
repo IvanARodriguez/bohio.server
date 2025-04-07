@@ -1,5 +1,3 @@
-using Bohio.Core.DTOs;
-
 namespace Bohio.Core.Results;
 
 public class Result

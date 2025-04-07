@@ -56,7 +56,6 @@ public static class HomeSpaceEndpoints
       return TypedResults.BadRequest(new List<Error> { Errors.HomeSpace.InvalidData });
     }
 
-    // Check if HomeSpace already exists (avoid duplicates)
     if (homeSpace.Id != Ulid.Empty)
     {
       var existing = await service.GetHomeSpaceByIdAsync(homeSpace.Id);
@@ -66,12 +65,11 @@ public static class HomeSpaceEndpoints
       }
     }
 
-    // Add new HomeSpace and handle validation errors properly
     var result = await service.AddHomeSpaceAsync(homeSpace);
 
     if (!result.IsSuccess)
     {
-      return TypedResults.BadRequest(result.Errors); // Return all validation errors
+      return TypedResults.BadRequest(result.Errors);
     }
 
     string location = $"/api/homespace/{homeSpace.Id}";

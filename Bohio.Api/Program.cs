@@ -18,6 +18,17 @@ Log.Logger = new LoggerConfiguration()
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+  options.AddPolicy("AllowAll", policy =>
+  {
+    policy.WithOrigins("http://localhost:3000")
+          .AllowAnyHeader()
+          .AllowCredentials()
+          .AllowAnyMethod();
+  });
+});
+
 builder.Host.UseSerilog((context, services, configuration) => configuration
 .ReadFrom.Configuration(context.Configuration)
 .WriteTo.Console());
@@ -45,15 +56,15 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAntiforgery();
 builder.Services.Configure<FormOptions>(options =>
    {
-       options.MultipartBodyLengthLimit = 104857600; // Set a limit if needed (100MB in this example)
+     options.MultipartBodyLengthLimit = 104857600; // Set a limit if needed (100MB in this example)
    });
 
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-    options.JsonSerializerOptions.Converters.Add(new UlidJsonConverter());
+  options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+  options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+  options.JsonSerializerOptions.Converters.Add(new UlidJsonConverter());
 });
 
 var app = builder.Build();
@@ -65,44 +76,44 @@ app.UseAuthorization();
 
 app.MapGet("/", () =>
 {
-    WelcomeMessage response = new()
-    {
-        Message = "Welcome to Bohio!"
-    };
-    return Results.Json(response);
+  WelcomeMessage response = new()
+  {
+    Message = "Welcome to Bohio!"
+  };
+  return Results.Json(response);
 });
 
 app.MapGet("/protected", (HttpContext context) =>
 {
-    var user = context.User.Identity;
-    if (user == null || !user.IsAuthenticated)
-    {
-        return Results.Unauthorized();
-    }
-    return Results.Ok($"Welcome {user.Name}!");
+  var user = context.User.Identity;
+  if (user == null || !user.IsAuthenticated)
+  {
+    return Results.Unauthorized();
+  }
+  return Results.Ok($"Welcome {user.Name}!");
 }).RequireAuthorization();
 
 var isTesting = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_TESTS") == "true";
 
 if (!isTesting)
 {
-    try
-    {
-        using var scope = app.Services.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        var databaseProvider = dbContext.Database.ProviderName;
+  try
+  {
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var databaseProvider = dbContext.Database.ProviderName;
 
-        if (databaseProvider != "Microsoft.EntityFrameworkCore.InMemory")
-        {
-            dbContext.Database.OpenConnection();
-            dbContext.Database.CloseConnection();
-            Log.Information("Database connected successfully.");
-        }
-    }
-    catch (Exception ex)
+    if (databaseProvider != "Microsoft.EntityFrameworkCore.InMemory")
     {
-        Log.Fatal(ex, "Failed to connect to the database.");
+      dbContext.Database.OpenConnection();
+      dbContext.Database.CloseConnection();
+      Log.Information("Database connected successfully.");
     }
+  }
+  catch (Exception ex)
+  {
+    Log.Fatal(ex, "Failed to connect to the database.");
+  }
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
@@ -114,5 +125,5 @@ var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
 Log.Information("App started in {environment} mode", builder.Environment.EnvironmentName);
 
-
+app.UseCors("AllowAll");
 app.Run();

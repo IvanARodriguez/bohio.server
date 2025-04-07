@@ -4,12 +4,12 @@ using Bohio.Infrastructure.Identity;
 
 namespace Bohio.Infrastructure.Mappings
 {
-    public class Profiles : Profile
+  public class Profiles : Profile
+  {
+    public Profiles()
     {
-        public Profiles()
-        {
-            CreateMap<AppUser, User>();
-            CreateMap<AppUser, GetUserResponse>();
-        }
+      CreateMap<AppUser, User>();
+      CreateMap<AppUser, GetUserResponse>();
     }
+  }
 }

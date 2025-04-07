@@ -13,27 +13,27 @@ namespace Bohio.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services)
+  public static IServiceCollection AddApplication(this IServiceCollection services)
+  {
+    services.AddScoped<HomeSpaceService>();
+    services.AddScoped<MediaServices>();
+    services.AddScoped<AuthService>();
+    services.AddSingleton<IValidator<HomeSpace>, HomeSpaceValidator>();
+    services.AddSingleton<IValidator<Media>, MediaValidator>();
+    services.AddSingleton<IValidator<FormFile>, FormFileValidator>();
+    services.AddSingleton<IValidator<LoginRequest>, LoginValidator>();
+    services.AddSingleton<IValidator<RegisterRequest>, RegisterValidator>();
+    services.AddSingleton<IValidator<ConfirmEmailRequest>, ConfirmEmailValidator>();
+    services.AddAutoMapper(typeof(Profiles));
+
+    services.AddLogging();
+
+    services.AddSingleton(provider =>
     {
-        services.AddScoped<HomeSpaceService>();
-        services.AddScoped<MediaServices>();
-        services.AddScoped<AuthService>();
-        services.AddSingleton<IValidator<HomeSpace>, HomeSpaceValidator>();
-        services.AddSingleton<IValidator<Media>, MediaValidator>();
-        services.AddSingleton<IValidator<FormFile>, FormFileValidator>();
-        services.AddSingleton<IValidator<LoginRequest>, LoginValidator>();
-        services.AddSingleton<IValidator<RegisterRequest>, RegisterValidator>();
-        services.AddSingleton<IValidator<ConfirmEmailRequest>, ConfirmEmailValidator>();
-        services.AddAutoMapper(typeof(Profiles));
+      var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+      return loggerFactory.CreateLogger("Application");
+    });
 
-        services.AddLogging();
-
-        services.AddSingleton(provider =>
-        {
-            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
-            return loggerFactory.CreateLogger("Application");
-        });
-
-        return services;
-    }
+    return services;
+  }
 }

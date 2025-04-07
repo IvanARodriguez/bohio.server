@@ -1,5 +1,20 @@
 {
-	"cSpell.words": ["Bohio", "DOTNET", "homespace", "referer", "Referer"],
-	"editor.formatOnSave": true,
-	"dotnet-test-explorer.testProjectPath": "**/*Tests.csproj"
+  "cSpell.words": [
+    "Bohio",
+    "DOTNET",
+    "homespace",
+    "Postgre",
+    "referer",
+    "Referer"
+  ],
+  "editor.formatOnSave": true,
+  "dotnet-test-explorer.testProjectPath": "**/*Tests.csproj",
+  "[csharp]": {
+    "editor.maxTokenizationLineLength": 2500,
+    "editor.inlineSuggest.suppressSuggestions": false,
+    "editor.indentSize": 2,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.autoIndent": "full"
+  }
 }
