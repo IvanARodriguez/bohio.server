@@ -34,6 +34,7 @@ public static class AuthEndpoints
 
     group.MapPost("/confirm-email", async ([FromBody] ConfirmEmailRequest request, AuthService authService) =>
     {
+
       var result = await authService.ConfirmEmailAsync(request);
       return result.IsSuccess ? Results.Ok("Email confirmed successfully!") : Results.BadRequest(result.Errors);
     });

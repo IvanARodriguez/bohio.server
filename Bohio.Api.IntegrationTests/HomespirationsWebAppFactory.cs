@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Testcontainers.PostgreSql;
@@ -31,11 +32,10 @@ internal class BohioWebAppFactory : WebApplicationFactory<Program>
   {
     builder.ConfigureTestServices(services =>
     {
-      services.RemoveAll(typeof(Serilog.ILogger));
       services.RemoveAll(typeof(DbContextOptions<AppDbContext>));
       services.AddDbContext<AppDbContext>(options =>
       {
-        options.EnableSensitiveDataLogging();
+        options.EnableSensitiveDataLogging(false);
         options.UseNpgsql(_dbContainer.GetConnectionString());
       });
 
@@ -47,6 +47,24 @@ internal class BohioWebAppFactory : WebApplicationFactory<Program>
       var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
       dbContext.Database.EnsureCreated();
     });
+
+    builder.ConfigureAppConfiguration((context, configBuilder) =>
+    {
+      var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+
+      configBuilder.SetBasePath(Directory.GetCurrentDirectory())
+                   .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                   .AddJsonFile($"appsettings.{env}.json", optional: true)
+                   .AddEnvironmentVariables();
+
+      Environment.SetEnvironmentVariable("JWT_SECRET", "ThisIsAValidTestKeyThatIsDefinitelyLongEnough123!");
+
+      if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("JWT_SECRET")))
+      {
+        throw new ArgumentException("JWT_SECRET environment variable is missing.");
+      }
+    });
+
   }
 
   /// <summary>

@@ -57,6 +57,16 @@ POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
+  "firstName": "Ivan",
+  "lastName": "Rodriguez",
   "email": "ivan@hitab.dev",
   "password": "@SecuredPassword134"
+}
+###
+POST http://localhost:5000/api/auth/confirm-email
+Content-Type: application/json
+
+{
+  "userId": "01JR8FHSR3A3FV0VFEKN6YF3X3",
+  "token": "CfDJ8C%2FI3HPrnMVBtb0kqOyvgHFc4jKTPFOStRMB6rK828TtDvTip0SEv52qjz4miwV5yXZiLr1KZ4kKHbD2d6OLeD5ulO7q27dyYEWbFv%2FQj7lhv1a%2Bb%2BmT2qVtTu9dYptFMhIwYXNJrafW8IyhvT3329mUj6uvBs202u7%2FmxxTVyb9Dap8Fj3OCr6wE5oEakfd3AWrnyVMlpuCddEaf2xs8KZMA1aRlxSCzT7BqWvBGMMP"
 }

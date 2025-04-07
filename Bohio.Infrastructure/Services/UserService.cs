@@ -15,6 +15,7 @@ using System.Text;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Bohio.Infrastructure.Services;
 
@@ -23,7 +24,8 @@ public class UserService(
     IMapper mapper,
     ILogger<UserService> logger,
     IEmailService emailService,
-    IHttpContextAccessor httpContextAccessor
+    IHttpContextAccessor httpContextAccessor,
+    IConfiguration configuration
 ) : IUserService
 {
   private readonly UserManager<AppUser> _userManager = userManager;
@@ -31,6 +33,8 @@ public class UserService(
   private readonly ILogger<UserService> _logger = logger;
   private readonly IEmailService _emailService = emailService;
   private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+
+  private readonly IConfiguration _configuration = configuration;
 
   public async Task<(bool Success, List<Error>? Errors, User? User, string? Token)> CreateUserAsync(RegisterRequest request, Language language)
   {
@@ -186,12 +190,22 @@ public class UserService(
       _logger.LogError("JWT_SECRET environment variable is missing.");
       throw new ArgumentException("missing jwt secret");
     }
+
+    _logger.LogInformation(@"///////////////////// secret {SECRET}", secret);
+
+    if (secret.Length < 32)
+    {
+      _logger.LogError("JWT_SECRET environment variable is too short, it must be at least 256 bits (32 bytes).");
+      throw new ArgumentException("missing or invalid jwt secret");
+    }
+
     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
     var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
+    var validIssuer = _configuration["JwtSettings:validIssuer"];
+    var validAudience = _configuration["JwtSettings:validAudience"];
     var token = new JwtSecurityToken(
-        issuer: "bohio-server",
-        audience: "bohio-client",
+        issuer: validIssuer,
+        audience: validAudience,
         claims: claims,
         expires: DateTime.UtcNow.AddMinutes(15),
         signingCredentials: creds

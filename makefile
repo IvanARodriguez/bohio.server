@@ -37,6 +37,8 @@ migrate-new:
 # Run unit tests
 test:
 	$(DOTNET) test Bohio.Api.IntegrationTests/Bohio.Api.IntegrationTests.csproj
+test-verbose:
+	$(DOTNET) test Bohio.Api.IntegrationTests/Bohio.Api.IntegrationTests.csproj --logger "console;verbosity=detailed"
 
 # Publish the project
 publish:

@@ -14,9 +14,9 @@ public class HomeSpaceCrudTests : IClassFixture<BohioWebAppFactory>
 
   public HomeSpaceCrudTests()
   {
-    MyEnvironment.SetVariable("DOTNET_RUNNING_IN_TESTS", "true");
-    MyEnvironment.SetVariable("JWT_SECRET", "justAdding@someRandome2025Key");
-    MyEnvironment.SetVariable("DATABASE_CONNECTION_STRING", "this_connection_string:not_being_used");
+    Environment.SetEnvironmentVariable("DOTNET_RUNNING_IN_TESTS", "true");
+    Environment.SetEnvironmentVariable("JWT_SECRET", "ThisIsAValidTestKeyThatIsDefinitelyLongEnough123!");
+    Environment.SetEnvironmentVariable("DATABASE_CONNECTION_STRING", "this_connection_string:not_being_used");
     var app = new BohioWebAppFactory();
     _client = app.CreateDefaultClient();
   }
@@ -107,13 +107,4 @@ public class HomeSpaceCrudTests : IClassFixture<BohioWebAppFactory>
     var locationHeader = response.Headers.Location?.ToString();
     locationHeader.Should().NotBeNull();
   }
-}
-
-class MyEnvironment
-{
-  public static string GetVariable(string variableName) =>
-      Environment.GetEnvironmentVariable(variableName) ?? "";
-
-  public static void SetVariable(string variableName, string value) =>
-      Environment.SetEnvironmentVariable(variableName, value);
 }
