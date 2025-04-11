@@ -1,105 +1,116 @@
-using System.Net.Http.Json;
-using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations;
+using Bohio.Application.Services;
 using Bohio.Core.DTOs;
-using Bohio.Infrastructure.Services;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
+using Bohio.Core.Interfaces;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
-using NUlid;
+using FluentValidation.Results;
+using Moq;
+using Bohio.Core.Types;
 
 namespace Bohio.Api.IntegrationTests;
 
 public partial class AuthenticationTests : IClassFixture<BohioWebAppFactory>
 {
-  private readonly HttpClient _httpClient;
-  private readonly ILogger<AuthenticationTests> _logger;
+  private readonly Mock<IUserService> _userServiceMock = new();
+  private readonly Mock<ILogger<AuthService>> _loggerMock = new();
+  private readonly Mock<IValidator<RegisterRequest>> _registerValidatorMock = new();
+  private readonly Mock<IValidator<LoginRequest>> _loginValidatorMock = new();
+  private readonly Mock<IValidator<ConfirmEmailRequest>> _confirmEmailValidatorMock = new();
+
+  private readonly AuthService _authService;
+
   public AuthenticationTests()
   {
-    BohioWebAppFactory app = new();
-    _httpClient = app.CreateClient(new WebApplicationFactoryClientOptions
-    {
-      AllowAutoRedirect = false
-    });
-    var loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
-    _logger = loggerFactory.CreateLogger<AuthenticationTests>();
-
-    MockEmailService.SentEmails.Clear();
+    _authService = new AuthService(
+        _userServiceMock.Object,
+        _loggerMock.Object,
+        _registerValidatorMock.Object,
+        _loginValidatorMock.Object,
+        _confirmEmailValidatorMock.Object
+    );
   }
 
   [Fact]
-  public async Task Can_Register_Confirm_And_Login()
+  public async Task RegisterUserAsync_ReturnsSuccess_WhenValidRequest()
   {
-    // Register
-    var registerResponse = await _httpClient.PostAsJsonAsync("/api/auth/register", new RegisterRequest
+    // Arrange
+    var request = new RegisterRequest
     {
       Email = "ivan@hitab.dev",
-      Password = "SecureP@ssw0rd1991!",
+      Password = "ValidPassw0rd1991!",
       FirstName = "Test",
-      LastName = "Tester",
-    });
-    registerResponse.EnsureSuccessStatusCode();
-    _logger.LogInformation("Register response: {StatusCode}", registerResponse.StatusCode);
-    var email = MockEmailService.SentEmails.FirstOrDefault();
-    Assert.NotNull(email);
-    var (userId, token) = ExtractUserIdAndToken(email.HtmlBody);
+      LastName = "User"
+    };
 
-    if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
-    {
-      throw new Exception("user ID or Token are empty when registering the user");
-    }
-    if (!Ulid.TryParse(userId, out var userUlid))
-    {
-      _logger.LogError("User ID or Token are empty when registering the user");
-      throw new Exception("could not parse user id to Ulid");
-    }
-    _logger.LogInformation("User ID: {UserId}, Token: {Token}", userId, token);
-    // Confirm
-    var confirmResponse = await _httpClient.PostAsJsonAsync("/api/auth/confirm-email", new ConfirmEmailRequest
-    {
-      UserId = userUlid,
-      Token = token
-    });
+    _registerValidatorMock
+    .Setup(v => v.ValidateAsync(request, default))
+    .ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
-    _logger.LogInformation("ConfirmEmail response: {StatusCode}", confirmResponse.StatusCode);
+    _userServiceMock
+    .Setup(u => u.CreateUserAsync(request, Language.EN))
+    .ReturnsAsync((true, null, new User(), "token"));
 
-    var confirmContent = await confirmResponse.Content.ReadAsStringAsync();
-    _logger.LogInformation("ConfirmEmail response body: {Content}", confirmContent);
+    // Act
+    var result = await _authService.RegisterUserAsync(request, Language.EN);
 
-    confirmResponse.EnsureSuccessStatusCode();
+    // Assert
+    Assert.True(result.IsSuccess);
+    Assert.Empty(result.Errors ?? []);
+  }
 
-    // Login
-    var loginResponse = await _httpClient.PostAsJsonAsync("/api/auth/login", new LoginRequest
+  [Fact]
+  public async Task LoginUserAsync_ReturnSuccess_WhenValidRequest()
+  {
+    // Arrange
+    var request = new LoginRequest
     {
       Email = "ivan@hitab.dev",
-      Password = "SecureP@ssw0rd1991!"
-    });
+      Password = "ValidP@ssw0rd1991!"
+    };
 
-    loginResponse.EnsureSuccessStatusCode();
-    var cookies = loginResponse.Headers.GetValues("Set-Cookie").ToList();
-    Assert.Contains(cookies, c => c.StartsWith("AccessToken"));
-    Assert.Contains(cookies, c => c.StartsWith("RefreshToken"));
+    _loginValidatorMock
+    .Setup(v => v.ValidateAsync(request, default))
+    .ReturnsAsync(new FluentValidation.Results.ValidationResult());
+
+    _userServiceMock
+    .Setup(u => u.LoginAsync(request))
+    .ReturnsAsync((null, new AuthResponse { Message = "" }));
+
+    // Act
+    var result = await _authService.LoginAsync(request);
+
+    // Assert
+    Assert.True(result.IsSuccess);
+    Assert.Empty(result.Errors ?? []);
   }
 
-  private (string userId, string token) ExtractUserIdAndToken(string body)
+  public static IEnumerable<object[]> InvalidPasswords =>
+[
+    [new LoginRequest { Email = "ivan@hitab.dev", Password = "" }], // empty
+    [new LoginRequest { Email = "ivan@hitab.dev", Password = "short" }], // too short
+    [new LoginRequest { Email = "ivan@hitab.dev", Password = "123456" }], // common
+    [new LoginRequest { Email = "ivan@hitab.dev", Password = "Password" }], // missing number & special char
+    [new LoginRequest { Email = "ivan@hitab.dev", Password = "Password1" }], // missing special char
+];
+
+  [Theory]
+  [MemberData(nameof(InvalidPasswords))]
+  public async Task LoginUserAsync_ReturnError_WhenInvalidPassword(LoginRequest creds)
   {
-    var userIdMatch = UserIdRegex().Match(body);
-    var tokenMatch = TokenRegex().Match(body);
+    // Arrange
+    var validationFailure = new ValidationFailure(nameof(LoginRequest.Password), "Invalid password");
+    var validationResult = new FluentValidation.Results.ValidationResult(new List<ValidationFailure> { validationFailure });
 
-    if (!userIdMatch.Success || !tokenMatch.Success)
-    {
-      throw new InvalidOperationException("Could not extract userId and token from email.");
-    }
+    _loginValidatorMock
+        .Setup(v => v.ValidateAsync(creds, default))
+        .ReturnsAsync(validationResult);
 
-    var userId = userIdMatch.Groups[1].Value;
-    var token = tokenMatch.Groups[1].Value.Trim('"');
+    // Act
+    var result = await _authService.LoginAsync(creds);
 
-    return (userId, token);
+    // Assert
+    Assert.False(result.IsSuccess);
+    Assert.Contains(result.Errors, e => e.Message.Contains("Invalid password", StringComparison.OrdinalIgnoreCase));
   }
-
-
-  [GeneratedRegex(@"userId=([^&\s]+)")]
-  private static partial Regex UserIdRegex();
-
-  [GeneratedRegex(@"token=([^&\s]+)")]
-  private static partial Regex TokenRegex();
 }

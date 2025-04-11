@@ -11,22 +11,6 @@ public class SesEmailService(ILogger<SesEmailService> logger, IAmazonSimpleEmail
   private readonly ILogger<SesEmailService> _logger = logger;
   private readonly IAmazonSimpleEmailService _emailService = emailService;
 
-  // public string ReadEmailTemplate(TemplateEmailType emailType)
-  // {
-  //     string templateName = emailType switch
-  //     {
-  //         TemplateEmailType.SpanishRegistrationEnglish => "es-registration.html",
-  //         TemplateEmailType.EnglishRegistrationEmail => "en-registration.html",
-  //         _ => throw new ArgumentException("Template not supported"),
-  //     };
-  //     var assembly = Assembly.GetExecutingAssembly();
-  //     var resourceName = $"Bohio.Infrastructure.EmailTemplates.{templateName}";
-
-  //     using var stream = assembly.GetManifestResourceStream(resourceName) ?? throw new FileNotFoundException($"Template '{templateName}' not found.");
-  //     using var reader = new StreamReader(stream);
-  //     return reader.ReadToEnd();
-  // }
-
   public async Task SendEmailAsync(EmailOptions emailOption)
   {
     var mailBody = new Body
